@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #87CEEB; /* Light blue for the sky */
+  }
+  
+  #gameCanvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(#87CEEB, #228B22); /* Sky and ground */
+  }
+  
