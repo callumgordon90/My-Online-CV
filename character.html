@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Sprite</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #87CEEB; /* Sky blue background */
+    }
+    canvas {
+      border: 2px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="128" height="128"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Scale the canvas for that chunky pixel art look
+    const scale = 4;
+    canvas.style.width = canvas.width * scale + 'px';
+    canvas.style.height = canvas.height * scale + 'px';
+
+    // Function to draw the character
+    function drawCharacter() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Hair (blonde on top of the head)
+      ctx.fillStyle = '#FFD700'; // Gold for blonde
+      ctx.fillRect(48, 16, 32, 16); // Top of the head
+      ctx.fillRect(44, 24, 8, 16);  // Left side bangs
+      ctx.fillRect(76, 24, 8, 16);  // Right side bangs
+
+      // Face (skin tone)
+      ctx.fillStyle = '#FFE0BD'; // Light skin tone
+      ctx.fillRect(48, 24, 32, 32);
+
+      // Eyes (green)
+      ctx.fillStyle = '#008000'; // Green
+      ctx.fillRect(52, 34, 8, 8); // Left eye
+      ctx.fillRect(68, 34, 8, 8); // Right eye
+
+      // Mouth
+      ctx.fillStyle = '#8B0000'; // Dark red
+      ctx.fillRect(56, 48, 16, 4);
+
+      // Body (casual clothes - blue shirt)
+      ctx.fillStyle = '#1E90FF'; // Blue
+      ctx.fillRect(40, 60, 48, 40);
+
+      // Legs (jeans - dark blue)
+      ctx.fillStyle = '#000080'; // Navy blue
+      ctx.fillRect(40, 100, 16, 28); // Left leg
+      ctx.fillRect(72, 100, 16, 28); // Right leg
+
+      // Shoes (black)
+      ctx.fillStyle = '#000000'; // Black
+      ctx.fillRect(40, 124, 16, 4); // Left shoe
+      ctx.fillRect(72, 124, 16, 4); // Right shoe
+
+      // Arms (skin tone)
+      ctx.fillStyle = '#FFE0BD'; // Light skin tone
+      ctx.fillRect(24, 64, 16, 16); // Left arm
+      ctx.fillRect(88, 64, 16, 16); // Right arm
+    }
+
+    // Draw the character
+    drawCharacter();
+  </script>
+</body>
+</html>
