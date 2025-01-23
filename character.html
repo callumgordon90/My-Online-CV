@@ -3,79 +3,191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Sprite</title>
+  <title>16-Bit CV Game</title>
   <style>
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
-      background-color: #87CEEB; /* Sky blue background */
+      overflow: hidden;
     }
     canvas {
-      border: 2px solid black;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <canvas id="gameCanvas" width="128" height="128"></canvas>
+  <!-- Background Canvas -->
+  <canvas id="background"></canvas>
+
+  <!-- Character Canvas -->
+  <canvas id="character"></canvas>
 
   <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    // Select the background canvas and get the context
+    const backgroundCanvas = document.getElementById("background");
+    const ctxBackground = backgroundCanvas.getContext("2d");
 
-    // Scale the canvas for that chunky pixel art look
-    const scale = 4;
-    canvas.style.width = canvas.width * scale + 'px';
-    canvas.style.height = canvas.height * scale + 'px';
+    // Set canvas size
+    backgroundCanvas.width = window.innerWidth;
+    backgroundCanvas.height = window.innerHeight;
 
-    // Function to draw the character
-    function drawCharacter() {
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Colors for the scene
+    const skyColor = "#87CEEB"; // Light blue for sky
+    const grassColor = "#32CD32"; // Bright green for grass
+    const cloudColor = "#FFFFFF"; // White for clouds
 
-      // Hair (blonde on top of the head)
-      ctx.fillStyle = '#FFD700'; // Gold for blonde
-      ctx.fillRect(48, 16, 32, 16); // Top of the head
-      ctx.fillRect(44, 24, 8, 16);  // Left side bangs
-      ctx.fillRect(76, 24, 8, 16);  // Right side bangs
+    // Draw the background
+    function drawBackground() {
+      // Sky
+      ctxBackground.fillStyle = skyColor;
+      ctxBackground.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      // Face (skin tone)
-      ctx.fillStyle = '#FFE0BD'; // Light skin tone
-      ctx.fillRect(48, 24, 32, 32);
+      // Grass
+      const grassHeight = backgroundCanvas.height / 4; // Bottom quarter for grass
+      ctxBackground.fillStyle = grassColor;
+      ctxBackground.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+    }
 
-      // Eyes (green)
-      ctx.fillStyle = '#008000'; // Green
-      ctx.fillRect(52, 34, 8, 8); // Left eye
-      ctx.fillRect(68, 34, 8, 8); // Right eye
+    // Draw a pixelated cloud using the shape described earlier
+    function drawCloud(x, y) {
+      ctxBackground.fillStyle = cloudColor;
 
-      // Mouth
-      ctx.fillStyle = '#8B0000'; // Dark red
-      ctx.fillRect(56, 48, 16, 4);
+      const cloudShape = [
+        [1],              // Top row (single block)
+        [1, 1, 1, 1, 1], // Second row (wider part)
+        [1, 1, 1, 1, 1, 1, 1], // Third row
+        [1, 1, 1, 1, 1], // Fourth row
+      ];
 
-      // Body (casual clothes - blue shirt)
-      ctx.fillStyle = '#1E90FF'; // Blue
-      ctx.fillRect(40, 60, 48, 40);
+      // Draw each row of the cloud
+      for (let i = 0; i < cloudShape.length; i++) {
+        const row = cloudShape[i];
+        const startX = x - Math.floor(row.length / 2) * 20; // Center the row horizontally
+        const startY = y + (i * 20); // Increase Y for each row
 
-      // Legs (jeans - dark blue)
-      ctx.fillStyle = '#000080'; // Navy blue
-      ctx.fillRect(40, 100, 16, 28); // Left leg
-      ctx.fillRect(72, 100, 16, 28); // Right leg
+        // Draw the blocks in this row
+        for (let j = 0; j < row.length; j++) {
+          ctxBackground.fillRect(startX + j * 20, startY, 20, 20);
+        }
+      }
+    }
 
-      // Shoes (black)
-      ctx.fillStyle = '#000000'; // Black
-      ctx.fillRect(40, 124, 16, 4); // Left shoe
-      ctx.fillRect(72, 124, 16, 4); // Right shoe
+    // Draw multiple clouds
+    function drawClouds() {
+      drawCloud(100, 50);  // Cloud 1
+      drawCloud(300, 100); // Cloud 2
+      drawCloud(600, 70);  // Cloud 3
+      drawCloud(900, 150); // Cloud 4
+    }
 
-      // Arms (skin tone)
-      ctx.fillStyle = '#FFE0BD'; // Light skin tone
-      ctx.fillRect(24, 64, 16, 16); // Left arm
-      ctx.fillRect(88, 64, 16, 16); // Right arm
+    // Render the entire background scene
+    function renderBackground() {
+      drawBackground();
+      drawClouds();
+    }
+
+    renderBackground(); // Initial render of the background
+
+
+    // Select the character canvas and get the context
+    const canvas = document.getElementById("character");
+    const ctx = canvas.getContext("2d");
+
+    // Set canvas size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Character properties
+    const character = {
+      x: 100,
+      y: canvas.height - 150,  // Starting position
+      width: 50,
+      height: 50,
+      speed: 5,
+      dx: 0,  // Movement in x direction
+      dy: 0,  // Movement in y direction
+      gravity: 0.8,  // Gravity strength
+      jumpPower: -15, // Jumping force
+      grounded: false,  // Whether the character is on the ground
+    };
+
+    // Handle key presses for movement
+    const keys = {
+      right: false,
+      left: false,
+      up: false,
+    };
+
+    // Listen for keydown and keyup events
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "d") {
+        keys.right = true;
+      } else if (e.key === "ArrowLeft" || e.key === "a") {
+        keys.left = true;
+      } else if (e.key === "ArrowUp" || e.key === "w") {
+        if (character.grounded) {
+          character.dy = character.jumpPower;
+          character.grounded = false;
+        }
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowRight" || e.key === "d") {
+        keys.right = false;
+      } else if (e.key === "ArrowLeft" || e.key === "a") {
+        keys.left = false;
+      }
+    });
+
+    // Update character position
+    function updateCharacter() {
+      if (keys.right) {
+        character.dx = character.speed;
+      } else if (keys.left) {
+        character.dx = -character.speed;
+      } else {
+        character.dx = 0;
+      }
+
+      // Gravity simulation
+      if (character.y + character.height < canvas.height) {
+        character.dy += character.gravity;
+        character.grounded = false;
+      } else {
+        character.dy = 0;
+        character.grounded = true;
+        character.y = canvas.height - character.height;
+      }
+
+      // Move the character
+      character.x += character.dx;
+      character.y += character.dy;
+
+      // Prevent the character from going off-screen
+      if (character.x < 0) {
+        character.x = 0;
+      }
+      if (character.x + character.width > canvas.width) {
+        character.x = canvas.width - character.width;
+      }
     }
 
     // Draw the character
-    drawCharacter();
+    function drawCharacter() {
+      ctx.fillStyle = "#FFD700";  // Character color (blonde)
+      ctx.fillRect(character.x, character.y, character.width, character.height);
+    }
+
+    // Game loop
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      updateCharacter();  // Update character position
+      drawCharacter();    // Draw the character
+
+      requestAnimationFrame(gameLoop);  // Repeat the loop
+    }
+
+    gameLoop();  // Start the game loop
   </script>
 </body>
 </html>
