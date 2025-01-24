@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character Movement with Animation</title>
+  <title>Character Movement</title>
   <style> 
     body {
       margin: 0;
@@ -58,10 +58,7 @@
     const jumpHeight = 100;
     let isJumping = false;
     let jumpVelocity = 0;
-
-    // Animation variables
-    let frameCount = 0;
-
+    
     // Key press event listener
     let keysPressed = {
       left: false,
@@ -89,69 +86,67 @@
       // Clear the character canvas
       charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
 
-      const scaleFactor = 1.25;
+      // Adjusting character size by scaling all parts (1.5x bigger)
+const scaleFactor = 1.25;
 
-      // Hair
-      charCtx.fillStyle = '#FFD700'; // Gold for blonde
-      charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 16 * scaleFactor, 32 * scaleFactor, 16 * scaleFactor);
-      charCtx.fillRect(characterX + 44 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);
-      charCtx.fillRect(characterX + 76 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);
+// Hair
+charCtx.fillStyle = '#FFD700'; // Gold for blonde
+charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 16 * scaleFactor, 32 * scaleFactor, 16 * scaleFactor); // Top of the head
+charCtx.fillRect(characterX + 44 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);  // Left side bangs
+charCtx.fillRect(characterX + 76 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);  // Right side bangs
 
-      // Face
-      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
-      charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 24 * scaleFactor, 32 * scaleFactor, 32 * scaleFactor);
+// Face
+charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 24 * scaleFactor, 32 * scaleFactor, 32 * scaleFactor);
 
-      // Eyes
-      charCtx.fillStyle = '#008000'; // Green
-      charCtx.fillRect(characterX + 52 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Left eye
-      charCtx.fillRect(characterX + 66 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Right eye
+// Eyes
+charCtx.fillStyle = '#008000'; // Green
+charCtx.fillRect(characterX + 52 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Left eye
+charCtx.fillRect(characterX + 66 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Right eye
 
-      // Mouth
-      charCtx.fillStyle = '#8B0000'; // Dark red
-      charCtx.fillRect(characterX + 56 * scaleFactor, characterY + 48 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor);
+// Mouth
+charCtx.fillStyle = '#8B0000'; // Dark red
+charCtx.fillRect(characterX + 56 * scaleFactor, characterY + 48 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor);
 
-      // Body (casual clothes - blue shirt)
-      charCtx.fillStyle = '#1E90FF'; // Blue
-      charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 60 * scaleFactor, 48 * scaleFactor, 40 * scaleFactor);
+// Body (casual clothes - blue shirt)
+charCtx.fillStyle = '#1E90FF'; // Blue
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 60 * scaleFactor, 48 * scaleFactor, 40 * scaleFactor);
 
-      // Legs (animation logic)
-      charCtx.fillStyle = '#000080'; // Navy blue
-      if (keysPressed.left || keysPressed.right) {
-        // Walking animation
-        if (Math.floor(frameCount / 10) % 2 === 0) {
-          // First leg position
-          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
-          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor); // Right leg (bent)
-        } else {
-          // Second leg position
-          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor); // Left leg (bent)
-          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
-        }
-      } else {
-        // Standing position
-        charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
-        charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
-      }
+// Legs (jeans - dark blue)
+charCtx.fillStyle = '#000080'; // Navy blue
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
+charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
 
-      // Shoes
-      charCtx.fillStyle = '#000000'; // Black
-      charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Left shoe
-      charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Right shoe
+// Shoes
+charCtx.fillStyle = '#000000'; // Black
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Left shoe
+charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Right shoe
 
-      // Arms
-      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
-      charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Left arm
-      charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Right arm
+// Arms
+charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Left arm
+charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Right arm
+
+
+      
     }
 
     // Update character position based on gravity and keys
     function updateCharacter() {
-      if (keysPressed.left) characterX -= speed;
-      if (keysPressed.right) characterX += speed;
+      if (keysPressed.left) {
+        characterX -= speed;
+      }
+      if (keysPressed.right) {
+        characterX += speed;
+      }
+      if (keysPressed.up && !isJumping) {
+        isJumping = true;
+        jumpVelocity = -10; // Jump upwards
+      }
 
       if (isJumping) {
         characterY += jumpVelocity;
-        jumpVelocity += 0.5; // Gravity
+        jumpVelocity += 0.5; // Simulate gravity
 
         // Stop falling when touching the ground
         if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
@@ -167,11 +162,14 @@
 
     // Render function for character and updating
     function render() {
+      // Clear the screen
       drawBackground();
       drawCharacter();
+
+      // Update the character's movement
       updateCharacter();
 
-      frameCount++;
+      // Request the next frame
       requestAnimationFrame(render);
     }
 
@@ -181,3 +179,4 @@
   </script>
 </body>
 </html>
+
