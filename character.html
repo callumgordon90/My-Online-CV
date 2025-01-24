@@ -22,7 +22,9 @@
   <canvas id="background"></canvas>
   <canvas id="characterCanvas"></canvas>
 
-  <script>
+  <script type="module">
+    import { drawClouds } from './background.js';
+
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
     const bgCtx = backgroundCanvas.getContext("2d");
@@ -47,6 +49,9 @@
 
       bgCtx.fillStyle = grassColor;
       bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+
+      // Draw clouds
+      drawClouds(bgCtx);
     }
 
     // Character properties
