@@ -3,192 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>16-Bit CV Game</title>
+  <title>Character Movement</title>
   <style>
     body {
       margin: 0;
-      overflow: hidden;
+      overflow: hidden; /* Prevent scrolling */
     }
     canvas {
-      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   </style>
 </head>
-  <!-- NOTE: THE GAME IS RENDERED IN CHARACTER.HTML -->
 <body>
   <!-- Background Canvas -->
   <canvas id="background"></canvas>
-
+  
   <!-- Character Canvas -->
   <canvas id="character"></canvas>
 
   <script>
-    // Select the background canvas and get the context
-    const backgroundCanvas = document.getElementById("background");
-    const ctxBackground = backgroundCanvas.getContext("2d");
+    const characterCanvas = document.getElementById("character");
+    const characterCtx = characterCanvas.getContext("2d");
 
-    // Set canvas size
+    const backgroundCanvas = document.getElementById("background");
+    const backgroundCtx = backgroundCanvas.getContext("2d");
+
+    // Set canvas sizes to fill the screen
+    characterCanvas.width = window.innerWidth;
+    characterCanvas.height = window.innerHeight;
     backgroundCanvas.width = window.innerWidth;
     backgroundCanvas.height = window.innerHeight;
 
-    // Colors for the scene
-    const skyColor = "#87CEEB"; // Light blue for sky
-    const grassColor = "#32CD32"; // Bright green for grass
-    const cloudColor = "#FFFFFF"; // White for clouds
+    // Character variables
+    let characterX = 100; // Starting X position
+    let characterY = characterCanvas.height - 160; // Starting Y position (on the grass)
+    const characterWidth = 40;
+    const characterHeight = 60;
+    const speed = 5; // Speed of movement
+    const jumpHeight = 100; // Height of jump
+    let isJumping = false; // To track if the character is in the air
+    let jumpVelocity = 0;
 
-    // Draw the background
-    function drawBackground() {
-      // Sky
-      ctxBackground.fillStyle = skyColor;
-      ctxBackground.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    // Load character sprite (already provided as a yellow block)
+    const characterSprite = document.createElement("canvas");
+    const spriteCtx = characterSprite.getContext("2d");
+    characterSprite.width = characterWidth;
+    characterSprite.height = characterHeight;
 
-      // Grass
-      const grassHeight = backgroundCanvas.height / 4; // Bottom quarter for grass
-      ctxBackground.fillStyle = grassColor;
-      ctxBackground.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
-    }
+    spriteCtx.fillStyle = "#FFD700"; // Gold color for the character
+    spriteCtx.fillRect(0, 0, characterWidth, characterHeight);
 
-    // Draw a pixelated cloud using the shape described earlier
-    function drawCloud(x, y) {
-      ctxBackground.fillStyle = cloudColor;
-
-      const cloudShape = [
-        [1],              // Top row (single block)
-        [1, 1, 1, 1, 1], // Second row (wider part)
-        [1, 1, 1, 1, 1, 1, 1], // Third row
-        [1, 1, 1, 1, 1], // Fourth row
-      ];
-
-      // Draw each row of the cloud
-      for (let i = 0; i < cloudShape.length; i++) {
-        const row = cloudShape[i];
-        const startX = x - Math.floor(row.length / 2) * 20; // Center the row horizontally
-        const startY = y + (i * 20); // Increase Y for each row
-
-        // Draw the blocks in this row
-        for (let j = 0; j < row.length; j++) {
-          ctxBackground.fillRect(startX + j * 20, startY, 20, 20);
-        }
-      }
-    }
-
-    // Draw multiple clouds
-    function drawClouds() {
-      drawCloud(100, 50);  // Cloud 1
-      drawCloud(300, 100); // Cloud 2
-      drawCloud(600, 70);  // Cloud 3
-      drawCloud(900, 150); // Cloud 4
-    }
-
-    // Render the entire background scene
-    function renderBackground() {
-      drawBackground();
-      drawClouds();
-    }
-
-    renderBackground(); // Initial render of the background
-
-
-    // Select the character canvas and get the context
-    const canvas = document.getElementById("character");
-    const ctx = canvas.getContext("2d");
-
-    // Set canvas size
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Character properties
-    const character = {
-      x: 100,
-      y: canvas.height - 150,  // Starting position
-      width: 50,
-      height: 50,
-      speed: 5,
-      dx: 0,  // Movement in x direction
-      dy: 0,  // Movement in y direction
-      gravity: 0.8,  // Gravity strength
-      jumpPower: -15, // Jumping force
-      grounded: false,  // Whether the character is on the ground
-    };
-
-    // Handle key presses for movement
-    const keys = {
-      right: false,
-      left: false,
-      up: false,
-    };
-
-    // Listen for keydown and keyup events
+    // Event listener for key presses
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight" || e.key === "d") {
-        keys.right = true;
-      } else if (e.key === "ArrowLeft" || e.key === "a") {
-        keys.left = true;
-      } else if (e.key === "ArrowUp" || e.key === "w") {
-        if (character.grounded) {
-          character.dy = character.jumpPower;
-          character.grounded = false;
-        }
-      }
-    });
-
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "ArrowRight" || e.key === "d") {
-        keys.right = false;
-      } else if (e.key === "ArrowLeft" || e.key === "a") {
-        keys.left = false;
+      if (e.key === "ArrowLeft") {
+        characterX -= speed;
+      } else if (e.key === "ArrowRight") {
+        characterX += speed;
+      } else if (e.key === "ArrowUp" && !isJumping) {
+        isJumping = true;
+        jumpVelocity = -10;
       }
     });
 
     // Update character position
     function updateCharacter() {
-      if (keys.right) {
-        character.dx = character.speed;
-      } else if (keys.left) {
-        character.dx = -character.speed;
-      } else {
-        character.dx = 0;
+      // Apply gravity when jumping
+      if (isJumping) {
+        characterY += jumpVelocity;
+        jumpVelocity += 0.5; // Simulate gravity
+
+        if (characterY >= characterCanvas.height - 100) { // Grass level
+          characterY = characterCanvas.height - 100;
+          isJumping = false; // End jump
+        }
       }
 
-      // Gravity simulation
-      if (character.y + character.height < canvas.height) {
-        character.dy += character.gravity;
-        character.grounded = false;
-      } else {
-        character.dy = 0;
-        character.grounded = true;
-        character.y = canvas.height - character.height;
-      }
-
-      // Move the character
-      character.x += character.dx;
-      character.y += character.dy;
-
-      // Prevent the character from going off-screen
-      if (character.x < 0) {
-        character.x = 0;
-      }
-      if (character.x + character.width > canvas.width) {
-        character.x = canvas.width - character.width;
-      }
+      // Prevent character from moving off screen
+      if (characterX < 0) characterX = 0;
+      if (characterX + characterWidth > characterCanvas.width)
+        characterX = characterCanvas.width - characterWidth;
     }
 
-    // Draw the character
-    function drawCharacter() {
-      ctx.fillStyle = "#FFD700";  // Character color (blonde)
-      ctx.fillRect(character.x, character.y, character.width, character.height);
+    // Render the character and update movement
+    function renderCharacter() {
+      characterCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+
+      // Draw the character
+      characterCtx.drawImage(characterSprite, characterX, characterY, characterWidth, characterHeight);
+
+      // Update character position
+      updateCharacter();
+
+      // Loop animation
+      requestAnimationFrame(renderCharacter);
     }
 
-    // Game loop
-    function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-      updateCharacter();  // Update character position
-      drawCharacter();    // Draw the character
+    // Draw background
+    function drawBackground() {
+      backgroundCtx.fillStyle = "#87CEEB"; // Light blue sky
+      backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      requestAnimationFrame(gameLoop);  // Repeat the loop
+      const grassHeight = backgroundCanvas.height / 4; // Grass takes up the bottom quarter
+      backgroundCtx.fillStyle = "#32CD32"; // Bright green grass
+      backgroundCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+
+      // Draw clouds
+      const cloudShape = [
+        [1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+      ];
+
+      function drawCloud(x, y) {
+        backgroundCtx.fillStyle = "#FFFFFF"; // White color for clouds
+        for (let i = 0; i < cloudShape.length; i++) {
+          const row = cloudShape[i];
+          const startX = x - Math.floor(row.length / 2) * 20;
+          const startY = y + (i * 20);
+          for (let j = 0; j < row.length; j++) {
+            backgroundCtx.fillRect(startX + j * 20, startY, 20, 20);
+          }
+        }
+      }
+
+      drawCloud(100, 50);
+      drawCloud(300, 100);
+      drawCloud(600, 70);
+      drawCloud(900, 150);
     }
 
-    gameLoop();  // Start the game loop
+    // Start the render loops
+    function render() {
+      drawBackground();
+      renderCharacter();
+    }
+
+    render();
   </script>
 </body>
 </html>

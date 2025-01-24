@@ -1,13 +1,18 @@
 body {
     margin: 0;
-    overflow: hidden;
-    background-color: #87CEEB; /* Light blue for the sky */
+    overflow: hidden; /* Prevent scrolling */
   }
   
-  #gameCanvas {
+  canvas {
     display: block;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(#87CEEB, #228B22); /* Sky and ground */
+    position: absolute;
+  }
+  
+  #background {
+    z-index: 1; /* Background layer */
+  }
+  
+  #character {
+    z-index: 2; /* Character layer above background */
   }
   
