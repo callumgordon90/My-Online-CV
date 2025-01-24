@@ -1,7 +1,15 @@
-// background.js
-
 // Cloud color
 const cloudColor = "#FFFFFF"; // White clouds
+
+// Cloud positions for animation
+let cloudPositions = [
+  { x: 100, y: 50 },
+  { x: 300, y: 100 },
+  { x: 600, y: 70 },
+  { x: 900, y: 150 },
+];
+
+const cloudSpeed = 1; // Speed of cloud movement
 
 // Draw a pixelated, rounded cloud using a simpler shape
 function drawCloud(ctx, x, y) {
@@ -27,12 +35,17 @@ function drawCloud(ctx, x, y) {
   }
 }
 
-// Draw multiple clouds
+// Draw and animate multiple clouds
 function drawClouds(ctx) {
-  drawCloud(ctx, 100, 50);  // Cloud 1
-  drawCloud(ctx, 300, 100); // Cloud 2
-  drawCloud(ctx, 600, 70);  // Cloud 3
-  drawCloud(ctx, 900, 150); // Cloud 4
+  cloudPositions.forEach((cloud) => {
+    drawCloud(ctx, cloud.x, cloud.y);
+    cloud.x -= cloudSpeed; // Move the cloud to the left
+
+    // Reset cloud position when it moves off-screen
+    if (cloud.x < -100) {
+      cloud.x = ctx.canvas.width + 100; // Move it to the far right
+    }
+  });
 }
 
 // Export functions

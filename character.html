@@ -43,16 +43,16 @@
     const grassHeight = backgroundCanvas.height / 4;
 
     // Draw background function
-    function drawBackground() {
-      bgCtx.fillStyle = skyColor;
-      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+function drawBackground() {
+  bgCtx.fillStyle = skyColor;
+  bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      bgCtx.fillStyle = grassColor;
-      bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+  bgCtx.fillStyle = grassColor;
+  bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
 
-      // Draw clouds
-      drawClouds(bgCtx);
-    }
+  // Draw clouds (updated for animation)
+  drawClouds(bgCtx);
+}
 
     // Character properties
     let characterX = 100;
@@ -172,12 +172,15 @@
 
     // Render function for character and updating
     function render() {
-      drawBackground();
-      drawCharacter();
-      updateCharacter();
+    bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height); // Clear background canvas
+    charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height); // Clear character canvas
 
-      frameCount++;
-      requestAnimationFrame(render);
+    drawBackground(); // Draw the background with animated clouds
+    drawCharacter(); // Draw the character
+    updateCharacter(); // Update the character's position
+
+    frameCount++;
+    requestAnimationFrame(render);
     }
 
     // Draw background and start rendering
