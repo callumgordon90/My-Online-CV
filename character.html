@@ -4,144 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Character Movement</title>
-  <style>
+  <style> 
     body {
       margin: 0;
       overflow: hidden; /* Prevent scrolling */
     }
     canvas {
+      display: block;
       position: absolute;
       top: 0;
       left: 0;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
-  <!-- Background Canvas -->
   <canvas id="background"></canvas>
-  
-  <!-- Character Canvas -->
-  <canvas id="character"></canvas>
+  <canvas id="characterCanvas"></canvas>
 
   <script>
-    const characterCanvas = document.getElementById("character");
-    const characterCtx = characterCanvas.getContext("2d");
-
+    // Canvas setup
     const backgroundCanvas = document.getElementById("background");
-    const backgroundCtx = backgroundCanvas.getContext("2d");
+    const bgCtx = backgroundCanvas.getContext("2d");
+    const characterCanvas = document.getElementById("characterCanvas");
+    const charCtx = characterCanvas.getContext("2d");
 
-    // Set canvas sizes to fill the screen
-    characterCanvas.width = window.innerWidth;
-    characterCanvas.height = window.innerHeight;
+    // Set canvas size
     backgroundCanvas.width = window.innerWidth;
     backgroundCanvas.height = window.innerHeight;
+    characterCanvas.width = window.innerWidth;
+    characterCanvas.height = window.innerHeight;
 
-    // Character variables
-    let characterX = 100; // Starting X position
-    let characterY = characterCanvas.height - 160; // Starting Y position (on the grass)
+    // Background color and grass
+    const skyColor = "#87CEEB"; // Light blue sky
+    const grassColor = "#32CD32"; // Bright green grass
+    const grassHeight = backgroundCanvas.height / 4;
+
+    // Draw background function
+    function drawBackground() {
+      bgCtx.fillStyle = skyColor;
+      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+
+      bgCtx.fillStyle = grassColor;
+      bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+    }
+
+    // Character properties
+    let characterX = 100;
+    let characterY = backgroundCanvas.height - grassHeight - 60;
     const characterWidth = 40;
     const characterHeight = 60;
-    const speed = 5; // Speed of movement
-    const jumpHeight = 100; // Height of jump
-    let isJumping = false; // To track if the character is in the air
+    const speed = 5;
+    const jumpHeight = 100;
+    let isJumping = false;
     let jumpVelocity = 0;
+    
+    // Key press event listener
+    let keysPressed = {
+      left: false,
+      right: false,
+      up: false
+    };
 
-    // Load character sprite (already provided as a yellow block)
-    const characterSprite = document.createElement("canvas");
-    const spriteCtx = characterSprite.getContext("2d");
-    characterSprite.width = characterWidth;
-    characterSprite.height = characterHeight;
-
-    spriteCtx.fillStyle = "#FFD700"; // Gold color for the character
-    spriteCtx.fillRect(0, 0, characterWidth, characterHeight);
-
-    // Event listener for key presses
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") {
-        characterX -= speed;
-      } else if (e.key === "ArrowRight") {
-        characterX += speed;
-      } else if (e.key === "ArrowUp" && !isJumping) {
+      if (e.key === "ArrowLeft") keysPressed.left = true;
+      if (e.key === "ArrowRight") keysPressed.right = true;
+      if (e.key === "ArrowUp" && !isJumping) {
         isJumping = true;
-        jumpVelocity = -10;
+        jumpVelocity = -10; // Initial jump force
       }
     });
 
-    // Update character position
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowLeft") keysPressed.left = false;
+      if (e.key === "ArrowRight") keysPressed.right = false;
+      if (e.key === "ArrowUp") keysPressed.up = false;
+    });
+
+    // Function to draw the character (on canvas)
+    function drawCharacter() {
+      // Clear the character canvas
+      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+
+      // Hair (blonde on top of the head)
+      charCtx.fillStyle = '#FFD700'; // Gold for blonde
+      charCtx.fillRect(characterX + 8, characterY + 16, 32, 16); // Top of the head
+      charCtx.fillRect(characterX + 4, characterY + 24, 8, 16);  // Left side bangs
+      charCtx.fillRect(characterX + 28, characterY + 24, 8, 16);  // Right side bangs
+
+      // Face (skin tone)
+      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+      charCtx.fillRect(characterX + 8, characterY + 24, 32, 32);
+
+      // Eyes (green)
+      charCtx.fillStyle = '#008000'; // Green
+      charCtx.fillRect(characterX + 12, characterY + 34, 8, 8); // Left eye
+      charCtx.fillRect(characterX + 26, characterY + 34, 8, 8); // Right eye (moved 6 pixels to the right)
+      
+      // Mouth
+      charCtx.fillStyle = '#8B0000'; // Dark red
+      charCtx.fillRect(characterX + 16, characterY + 48, 16, 4);
+
+      // Body (casual clothes - blue shirt)
+      charCtx.fillStyle = '#1E90FF'; // Blue
+      charCtx.fillRect(characterX, characterY + 60, 40, 40);
+
+      // Legs (jeans - dark blue)
+      charCtx.fillStyle = '#000080'; // Navy blue
+      charCtx.fillRect(characterX, characterY + 100, 16, 28); // Left leg
+      charCtx.fillRect(characterX + 24, characterY + 100, 16, 28); // Right leg
+
+      // Shoes (black)
+      charCtx.fillStyle = '#000000'; // Black
+      charCtx.fillRect(characterX, characterY + 124, 16, 4); // Left shoe
+      charCtx.fillRect(characterX + 24, characterY + 124, 16, 4); // Right shoe
+
+      // Arms (skin tone)
+      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+      charCtx.fillRect(characterX - 16, characterY + 64, 16, 16); // Left arm
+      charCtx.fillRect(characterX + 40, characterY + 64, 16, 16); // Right arm
+    }
+
+    // Update character position based on gravity and keys
     function updateCharacter() {
-      // Apply gravity when jumping
+      if (keysPressed.left) {
+        characterX -= speed;
+      }
+      if (keysPressed.right) {
+        characterX += speed;
+      }
+      if (keysPressed.up && !isJumping) {
+        isJumping = true;
+        jumpVelocity = -10; // Jump upwards
+      }
+
       if (isJumping) {
         characterY += jumpVelocity;
         jumpVelocity += 0.5; // Simulate gravity
 
-        if (characterY >= characterCanvas.height - 100) { // Grass level
-          characterY = characterCanvas.height - 100;
-          isJumping = false; // End jump
+        // Stop falling when touching the ground
+        if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
+          characterY = backgroundCanvas.height - grassHeight - characterHeight;
+          isJumping = false;
         }
       }
 
-      // Prevent character from moving off screen
+      // Prevent the character from going off the screen horizontally
       if (characterX < 0) characterX = 0;
-      if (characterX + characterWidth > characterCanvas.width)
-        characterX = characterCanvas.width - characterWidth;
+      if (characterX + characterWidth > backgroundCanvas.width) characterX = backgroundCanvas.width - characterWidth;
     }
 
-    // Render the character and update movement
-    function renderCharacter() {
-      characterCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+    // Render function for character and updating
+    function render() {
+      // Clear the screen
+      drawBackground();
+      drawCharacter();
 
-      // Draw the character
-      characterCtx.drawImage(characterSprite, characterX, characterY, characterWidth, characterHeight);
-
-      // Update character position
+      // Update the character's movement
       updateCharacter();
 
-      // Loop animation
-      requestAnimationFrame(renderCharacter);
+      // Request the next frame
+      requestAnimationFrame(render);
     }
 
-    // Draw background
-    function drawBackground() {
-      backgroundCtx.fillStyle = "#87CEEB"; // Light blue sky
-      backgroundCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-
-      const grassHeight = backgroundCanvas.height / 4; // Grass takes up the bottom quarter
-      backgroundCtx.fillStyle = "#32CD32"; // Bright green grass
-      backgroundCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
-
-      // Draw clouds
-      const cloudShape = [
-        [1],
-        [1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1]
-      ];
-
-      function drawCloud(x, y) {
-        backgroundCtx.fillStyle = "#FFFFFF"; // White color for clouds
-        for (let i = 0; i < cloudShape.length; i++) {
-          const row = cloudShape[i];
-          const startX = x - Math.floor(row.length / 2) * 20;
-          const startY = y + (i * 20);
-          for (let j = 0; j < row.length; j++) {
-            backgroundCtx.fillRect(startX + j * 20, startY, 20, 20);
-          }
-        }
-      }
-
-      drawCloud(100, 50);
-      drawCloud(300, 100);
-      drawCloud(600, 70);
-      drawCloud(900, 150);
-    }
-
-    // Start the render loops
-    function render() {
-      drawBackground();
-      renderCharacter();
-    }
-
+    // Draw background and start rendering
+    drawBackground();
     render();
   </script>
 </body>
 </html>
+

@@ -33,6 +33,7 @@ function drawCloud(x, y) {
       [1, 1, 1, 1, 1],  // Second row 
       [1, 1, 1, 1, 1, 1, 1],// Third row 
       [1, 1, 1, 1, 1],// Fourth row 
+                
     ];
   
     // Draw each row from the cloudShape array
@@ -49,12 +50,13 @@ function drawCloud(x, y) {
   }
   
   // Draw multiple clouds
-function drawClouds() {
-  drawCloud(100, 50);  // Cloud 1
-  drawCloud(300, 100); // Cloud 2
-  drawCloud(600, 70);  // Cloud 3
-  drawCloud(900, 150); // Cloud 4
-}
+  function drawClouds() {
+    drawCloud(100, 50);  // Cloud 1
+    drawCloud(300, 100); // Cloud 2
+    drawCloud(600, 70);  // Cloud 3
+    drawCloud(900, 150); // Cloud 4
+  }
+  
 
 // Render the entire scene
 function render() {
