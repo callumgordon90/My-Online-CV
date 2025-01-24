@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Character Movement with Animation</title>
-  <style> 
+  <style>
     body {
       margin: 0;
       overflow: hidden; /* Prevent scrolling */
@@ -37,35 +37,39 @@
     characterCanvas.width = window.innerWidth;
     characterCanvas.height = window.innerHeight;
 
-    // Background color and grass
+    // Background and grass colors
     const skyColor = "#87CEEB"; // Light blue sky
     const grassColor = "#32CD32"; // Bright green grass
     const grassHeight = backgroundCanvas.height / 4;
 
-    // Draw background function
-function drawBackground() {
-  bgCtx.fillStyle = skyColor;
-  bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    // Milestone properties
+    const milestones = [
+      { year: "2020", x: 800 },
+      { year: "2021", x: 1800 },
+      { year: "2022", x: 2800 },
+      { year: "2023", x: 3800 },
+      { year: "2024", x: 4800 },
+      { year: "2025", x: 5800 },
+    ];
+    const milestoneColor = "#808080"; // Grey for menhirs
+    const milestoneWidth = 80; // Doubled width
+    const milestoneHeight = 100;
+    const milestoneFont = "bold 20px Arial"; // Chunky dark grey font
 
-  bgCtx.fillStyle = grassColor;
-  bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
-
-  // Draw clouds (updated for animation)
-  drawClouds(bgCtx);
-}
+    let backgroundOffset = 0; // Offset for scrolling background
+    const backgroundSpeed = 2; // Speed of background scroll
 
     // Character properties
-    let characterX = 100;
+    let characterX = backgroundCanvas.width / 2; // Start character near the center
     let characterY = backgroundCanvas.height - grassHeight - 60;
     const characterWidth = 40;
     const characterHeight = 60;
     const speed = 5;
     const jumpHeight = 100;
+    const leftCutoff = backgroundCanvas.width / 2 - 200; // Increased left range
+    const rightCutoff = backgroundCanvas.width / 2 + 100;
     let isJumping = false;
     let jumpVelocity = 0;
-
-    // Animation variables
-    let frameCount = 0;
 
     // Key press event listener
     let keysPressed = {
@@ -89,9 +93,8 @@ function drawBackground() {
       if (e.key === "ArrowUp") keysPressed.up = false;
     });
 
-    // Function to draw the character (on canvas)
+    // Function to draw the character
     function drawCharacter() {
-      // Clear the character canvas
       charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
 
       const scaleFactor = 1.25;
@@ -122,70 +125,110 @@ function drawBackground() {
       // Legs (animation logic)
       charCtx.fillStyle = '#000080'; // Navy blue
       if (keysPressed.left || keysPressed.right) {
-        // Walking animation
         if (Math.floor(frameCount / 10) % 2 === 0) {
-          // First leg position
-          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
-          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor); // Right leg (bent)
+          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor);
+          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor);
         } else {
-          // Second leg position
-          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor); // Left leg (bent)
-          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
+          charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 108 * scaleFactor, 16 * scaleFactor, 20 * scaleFactor);
+          charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor);
         }
       } else {
-        // Standing position
-        charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
-        charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
+        charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor);
+        charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor);
       }
 
       // Shoes
       charCtx.fillStyle = '#000000'; // Black
-      charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Left shoe
-      charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Right shoe
+      charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor);
+      charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor);
 
       // Arms
       charCtx.fillStyle = '#FFE0BD'; // Light skin tone
-      charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Left arm
-      charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Right arm
+      charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor);
+      charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor);
     }
 
-    // Update character position based on gravity and keys
-    function updateCharacter() {
-      if (keysPressed.left) characterX -= speed;
-      if (keysPressed.right) characterX += speed;
+    // Draw the background
+function drawBackground() {
+  bgCtx.fillStyle = skyColor;
+  bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+
+  bgCtx.fillStyle = grassColor;
+  bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+
+  // Draw milestones
+  milestones.forEach((milestone) => {
+    const milestoneX = milestone.x - backgroundOffset;
+    if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
+      bgCtx.fillStyle = milestoneColor;
+      bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
+
+      // Draw "año" and the year (moved closer to the top of the milestone)
+      bgCtx.fillStyle = "#404040"; // Dark grey text
+      bgCtx.font = milestoneFont;
+      bgCtx.textAlign = "center";
+      bgCtx.fillText(
+        "año", // "año" text
+        milestoneX + milestoneWidth / 2,
+        backgroundCanvas.height - grassHeight - milestoneHeight + 25 // Moved up
+      );
+      bgCtx.fillText(
+        milestone.year, // Year
+        milestoneX + milestoneWidth / 2,
+        backgroundCanvas.height - grassHeight - milestoneHeight + 45 // Moved up
+      );
+    }
+  });
+
+      // Draw clouds
+      drawClouds(bgCtx);
+    }
+
+    // Update the character and background positions
+    function updatePositions() {
+      if (keysPressed.left) {
+        if (characterX > leftCutoff) {
+          characterX -= speed;
+        } else {
+          backgroundOffset -= backgroundSpeed;
+        }
+      }
+      if (keysPressed.right) {
+        if (characterX < rightCutoff) {
+          characterX += speed;
+        } else {
+          backgroundOffset += backgroundSpeed;
+        }
+      }
 
       if (isJumping) {
         characterY += jumpVelocity;
-        jumpVelocity += 0.5; // Gravity
-
-        // Stop falling when touching the ground
+        jumpVelocity += 0.5;
         if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
           characterY = backgroundCanvas.height - grassHeight - characterHeight;
           isJumping = false;
         }
       }
 
-      // Prevent the character from going off the screen horizontally
       if (characterX < 0) characterX = 0;
-      if (characterX + characterWidth > backgroundCanvas.width) characterX = backgroundCanvas.width - characterWidth;
     }
 
-    // Render function for character and updating
+    // Render loop
     function render() {
-    bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height); // Clear background canvas
-    charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height); // Clear character canvas
+      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
 
-    drawBackground(); // Draw the background with animated clouds
-    drawCharacter(); // Draw the character
-    updateCharacter(); // Update the character's position
+      drawBackground();
+      drawCharacter();
+      updatePositions();
 
-    frameCount++;
-    requestAnimationFrame(render);
+      frameCount++;
+      requestAnimationFrame(render);
     }
 
-    // Draw background and start rendering
-    drawBackground();
+    let frameCount = 0;
     render();
   </script>
 </body>
 </html>
+
