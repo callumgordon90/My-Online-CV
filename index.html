@@ -3,13 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>16-bit CV Game</title>
-  <link rel="stylesheet" href="style.css">
+  <title>16-Bit CV Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #87CEEB; /* Light blue background */
+      font-family: "Arial", sans-serif;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #FFFFFF;
+      text-shadow: 2px 2px #000000;
+    }
+    a {
+      display: block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #FFD700; /* Gold color for links */
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: #32CD32; /* Bright green button */
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    a:hover {
+      transform: scale(1.1);
+      background-color: #228B22; /* Darker green on hover */
+    }
+  </style>
 </head>
-<!--New body linking to other elements in the game-->
 <body>
-    <canvas id="background" width="800" height="400"></canvas>
-    <script src="background.js"></script>
-    <script src="character.js"></script>
-  </body>
+  <div>
+    <h1>Welcome to My 16-Bit CV Game</h1>
+    <a href="character.html">Start the Game</a>
+  </div>
+</body>
 </html>
