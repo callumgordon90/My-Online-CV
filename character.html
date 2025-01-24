@@ -86,43 +86,49 @@
       // Clear the character canvas
       charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
 
-      // Hair (blonde on top of the head)
-      charCtx.fillStyle = '#FFD700'; // Gold for blonde
-      charCtx.fillRect(characterX + 8, characterY + 16, 32, 16); // Top of the head
-      charCtx.fillRect(characterX + 4, characterY + 24, 8, 16);  // Left side bangs
-      charCtx.fillRect(characterX + 28, characterY + 24, 8, 16);  // Right side bangs
+      // Adjusting character size by scaling all parts (1.5x bigger)
+const scaleFactor = 1.25;
 
-      // Face (skin tone)
-      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
-      charCtx.fillRect(characterX + 8, characterY + 24, 32, 32);
+// Hair
+charCtx.fillStyle = '#FFD700'; // Gold for blonde
+charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 16 * scaleFactor, 32 * scaleFactor, 16 * scaleFactor); // Top of the head
+charCtx.fillRect(characterX + 44 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);  // Left side bangs
+charCtx.fillRect(characterX + 76 * scaleFactor, characterY + 24 * scaleFactor, 8 * scaleFactor, 16 * scaleFactor);  // Right side bangs
 
-      // Eyes (green)
-      charCtx.fillStyle = '#008000'; // Green
-      charCtx.fillRect(characterX + 12, characterY + 34, 8, 8); // Left eye
-      charCtx.fillRect(characterX + 26, characterY + 34, 8, 8); // Right eye (moved 6 pixels to the right)
+// Face
+charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+charCtx.fillRect(characterX + 48 * scaleFactor, characterY + 24 * scaleFactor, 32 * scaleFactor, 32 * scaleFactor);
+
+// Eyes
+charCtx.fillStyle = '#008000'; // Green
+charCtx.fillRect(characterX + 52 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Left eye
+charCtx.fillRect(characterX + 66 * scaleFactor, characterY + 34 * scaleFactor, 8 * scaleFactor, 8 * scaleFactor); // Right eye
+
+// Mouth
+charCtx.fillStyle = '#8B0000'; // Dark red
+charCtx.fillRect(characterX + 56 * scaleFactor, characterY + 48 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor);
+
+// Body (casual clothes - blue shirt)
+charCtx.fillStyle = '#1E90FF'; // Blue
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 60 * scaleFactor, 48 * scaleFactor, 40 * scaleFactor);
+
+// Legs (jeans - dark blue)
+charCtx.fillStyle = '#000080'; // Navy blue
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Left leg
+charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 100 * scaleFactor, 16 * scaleFactor, 28 * scaleFactor); // Right leg
+
+// Shoes
+charCtx.fillStyle = '#000000'; // Black
+charCtx.fillRect(characterX + 40 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Left shoe
+charCtx.fillRect(characterX + 72 * scaleFactor, characterY + 124 * scaleFactor, 16 * scaleFactor, 4 * scaleFactor); // Right shoe
+
+// Arms
+charCtx.fillStyle = '#FFE0BD'; // Light skin tone
+charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Left arm
+charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor); // Right arm
+
+
       
-      // Mouth
-      charCtx.fillStyle = '#8B0000'; // Dark red
-      charCtx.fillRect(characterX + 16, characterY + 48, 16, 4);
-
-      // Body (casual clothes - blue shirt)
-      charCtx.fillStyle = '#1E90FF'; // Blue
-      charCtx.fillRect(characterX, characterY + 60, 40, 40);
-
-      // Legs (jeans - dark blue)
-      charCtx.fillStyle = '#000080'; // Navy blue
-      charCtx.fillRect(characterX, characterY + 100, 16, 28); // Left leg
-      charCtx.fillRect(characterX + 24, characterY + 100, 16, 28); // Right leg
-
-      // Shoes (black)
-      charCtx.fillStyle = '#000000'; // Black
-      charCtx.fillRect(characterX, characterY + 124, 16, 4); // Left shoe
-      charCtx.fillRect(characterX + 24, characterY + 124, 16, 4); // Right shoe
-
-      // Arms (skin tone)
-      charCtx.fillStyle = '#FFE0BD'; // Light skin tone
-      charCtx.fillRect(characterX - 16, characterY + 64, 16, 16); // Left arm
-      charCtx.fillRect(characterX + 40, characterY + 64, 16, 16); // Right arm
     }
 
     // Update character position based on gravity and keys
