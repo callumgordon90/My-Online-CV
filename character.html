@@ -148,6 +148,44 @@
       charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor);
     }
 
+   ////////////
+   // Obstacle properties
+   const obstacles = [];
+    const minSpeed = 2;
+    const maxSpeed = 5;
+
+    // Create new obstacle
+    function createObstacle() {
+      const obstacle = {
+        x: backgroundCanvas.width, // Start from the right
+        y: backgroundCanvas.height - grassHeight - 20, // Position on the ground
+        width: 40,
+        height: 20,
+        speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
+      };
+      obstacles.push(obstacle);
+      console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
+    }
+
+    // Draw obstacles
+    function drawObstacles() {
+      obstacles.forEach((obstacle, index) => {
+        // Move obstacle
+        obstacle.x -= obstacle.speed;
+
+        // If it moves off-screen, remove it and create a new one
+        if (obstacle.x + obstacle.width < 0) {
+          obstacles.splice(index, 1);
+          createObstacle();
+        }
+
+        // Draw the obstacle
+        bgCtx.fillStyle = "#FF4500"; // Orange color
+        bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
+      });
+    }
+   ///////////////////
+
     // Draw the background
     function drawBackground() {
       bgCtx.fillStyle = skyColor;
@@ -177,9 +215,21 @@
 // Token properties
 const tokens = [
   { x: 1000, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 1500, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 2300, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 3000, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15 },
 ];
 const tokenRadius = 25; // Increased size of the token
 const tokenColor = "#FF0000"; // Red color for the question mark
@@ -253,6 +303,7 @@ function drawTokens() {
       drawBackground();
       drawTokens();
       drawCharacter();
+      drawObstacles();
       checkTokenCollection();
       updatePositions();
 
@@ -261,6 +312,10 @@ function drawTokens() {
     }
 
     let frameCount = 0;
+
+     // Create initial obstacle
+     createObstacle();
+
     render();
   </script>
 </body>

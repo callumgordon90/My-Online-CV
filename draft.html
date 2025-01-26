@@ -131,3 +131,174 @@
 </body>
 </html>
 
+<!-- character.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character with Obstacles</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="background"></canvas>
+  <canvas id="characterCanvas"></canvas>
+
+  <script type="module">
+    // Canvas setup
+    const backgroundCanvas = document.getElementById("background");
+    const bgCtx = backgroundCanvas.getContext("2d");
+    const characterCanvas = document.getElementById("characterCanvas");
+    const charCtx = characterCanvas.getContext("2d");
+
+    // Set canvas size
+    backgroundCanvas.width = window.innerWidth;
+    backgroundCanvas.height = window.innerHeight;
+    characterCanvas.width = window.innerWidth;
+    characterCanvas.height = window.innerHeight;
+
+    // Background colors
+    const skyColor = "#87CEEB"; // Light blue sky
+    const grassColor = "#32CD32"; // Bright green grass
+    const grassHeight = backgroundCanvas.height / 4;
+
+    let backgroundOffset = 0;
+    const backgroundSpeed = 2;
+
+    // Character properties
+    let characterX = backgroundCanvas.width / 2;
+    let characterY = backgroundCanvas.height - grassHeight - 60;
+    const characterWidth = 40;
+    const characterHeight = 60;
+    const speed = 5;
+    const jumpHeight = 100;
+    let isJumping = false;
+    let jumpVelocity = 0;
+
+    // Key press event listener
+    let keysPressed = {
+      left: false,
+      right: false,
+      up: false
+    };
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") keysPressed.left = true;
+      if (e.key === "ArrowRight") keysPressed.right = true;
+      if (e.key === "ArrowUp" && !isJumping) {
+        isJumping = true;
+        jumpVelocity = -10; // Initial jump force
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "ArrowLeft") keysPressed.left = false;
+      if (e.key === "ArrowRight") keysPressed.right = false;
+      if (e.key === "ArrowUp") keysPressed.up = false;
+    });
+
+    // Function to draw the character
+    function drawCharacter() {
+      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+      charCtx.fillStyle = "#FFD700"; // Gold for blonde
+      charCtx.fillRect(characterX, characterY, characterWidth, characterHeight);
+    }
+
+    // Obstacle properties
+    const obstacles = [];
+    const minSpeed = 2;
+    const maxSpeed = 5;
+
+    // Create new obstacle
+    function createObstacle() {
+      const obstacle = {
+        x: backgroundCanvas.width, // Start from the right
+        y: backgroundCanvas.height - grassHeight - 20, // Position on the ground
+        width: 40,
+        height: 20,
+        speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
+      };
+      obstacles.push(obstacle);
+      console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
+    }
+
+    // Draw obstacles
+    function drawObstacles() {
+      obstacles.forEach((obstacle, index) => {
+        // Move obstacle
+        obstacle.x -= obstacle.speed;
+
+        // If it moves off-screen, remove it and create a new one
+        if (obstacle.x + obstacle.width < 0) {
+          obstacles.splice(index, 1);
+          createObstacle();
+        }
+
+        // Draw the obstacle
+        bgCtx.fillStyle = "#FF4500"; // Orange color
+        bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
+      });
+    }
+
+    // Update positions (handles movement)
+    function updatePositions() {
+      if (keysPressed.left) {
+        if (characterX > backgroundCanvas.width / 2 - 450) {
+          characterX -= speed;
+        } else {
+          backgroundOffset -= backgroundSpeed;
+        }
+      }
+      if (keysPressed.right) {
+        if (characterX < backgroundCanvas.width / 2 + 100) {
+          characterX += speed;
+        } else {
+          backgroundOffset += backgroundSpeed;
+        }
+      }
+
+      if (isJumping) {
+        characterY += jumpVelocity;
+        jumpVelocity += 0.5;
+        if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
+          characterY = backgroundCanvas.height - grassHeight - characterHeight;
+          isJumping = false;
+        }
+      }
+
+      if (characterX < 0) characterX = 0;
+    }
+
+    // Render loop
+    function render() {
+      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+
+      drawCharacter();
+      drawObstacles(); // Draw obstacles on the background
+      updatePositions();
+
+      requestAnimationFrame(render);
+    }
+
+    let frameCount = 0;
+
+    // Create initial obstacle
+    createObstacle();
+
+    render();
+  </script>
+</body>
+</html>
