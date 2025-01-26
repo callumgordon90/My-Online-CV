@@ -149,41 +149,43 @@
     }
 
    ////////////
-   // Obstacle properties
-   const obstacles = [];
-    const minSpeed = 2;
-    const maxSpeed = 5;
+   ///////////
+// Obstacle properties
+const obstacles = [];
+const minSpeed = 2;
+const maxSpeed = 5;
 
-    // Create new obstacle
-    function createObstacle() {
-      const obstacle = {
-        x: backgroundCanvas.width, // Start from the right
-        y: backgroundCanvas.height - grassHeight - 20, // Position on the ground
-        width: 40,
-        height: 20,
-        speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
-      };
-      obstacles.push(obstacle);
-      console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
+// Create new obstacle
+function createObstacle() {
+  const obstacle = {
+    x: backgroundCanvas.width, // Start from the right
+    y: backgroundCanvas.height - grassHeight + 70, // Position on the ground
+    width: 40,
+    height: 20,
+    speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
+  };
+  obstacles.push(obstacle);
+  console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
+}
+
+// Draw obstacles
+function drawObstacles() {
+  obstacles.forEach((obstacle, index) => {
+    // Move obstacle
+    obstacle.x -= obstacle.speed;
+
+    // If it moves off-screen, remove it and create a new one
+    if (obstacle.x + obstacle.width < 0) {
+      obstacles.splice(index, 1);
+      createObstacle();
     }
 
-    // Draw obstacles
-    function drawObstacles() {
-      obstacles.forEach((obstacle, index) => {
-        // Move obstacle
-        obstacle.x -= obstacle.speed;
+    // Draw the obstacle
+    bgCtx.fillStyle = "#FF4500"; // Orange color
+    bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
+  });
+}
 
-        // If it moves off-screen, remove it and create a new one
-        if (obstacle.x + obstacle.width < 0) {
-          obstacles.splice(index, 1);
-          createObstacle();
-        }
-
-        // Draw the obstacle
-        bgCtx.fillStyle = "#FF4500"; // Orange color
-        bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
-      });
-    }
    ///////////////////
 
     // Draw the background
@@ -294,6 +296,9 @@ function drawTokens() {
 
       if (characterX < 0) characterX = 0;
     }
+
+    
+
 
     // Render loop
     function render() {
