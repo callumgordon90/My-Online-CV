@@ -52,21 +52,21 @@
       { year: "2025", x: 5800 },
     ];
     const milestoneColor = "#808080"; // Grey for menhirs
-    const milestoneWidth = 80; // Doubled width
+    const milestoneWidth = 80;
     const milestoneHeight = 100;
-    const milestoneFont = "bold 20px Arial"; // Chunky dark grey font
+    const milestoneFont = "bold 20px Arial";
 
-    let backgroundOffset = 0; // Offset for scrolling background
-    const backgroundSpeed = 2; // Speed of background scroll
+    let backgroundOffset = 0;
+    const backgroundSpeed = 2;
 
     // Character properties
-    let characterX = backgroundCanvas.width / 2; // Start character near the center
+    let characterX = backgroundCanvas.width / 2;
     let characterY = backgroundCanvas.height - grassHeight - 60;
     const characterWidth = 40;
     const characterHeight = 60;
     const speed = 5;
     const jumpHeight = 100;
-    const leftCutoff = backgroundCanvas.width / 2 - 200; // Increased left range
+    const leftCutoff = backgroundCanvas.width / 2 - 450;
     const rightCutoff = backgroundCanvas.width / 2 + 100;
     let isJumping = false;
     let jumpVelocity = 0;
@@ -149,42 +149,74 @@
     }
 
     // Draw the background
-function drawBackground() {
-  bgCtx.fillStyle = skyColor;
-  bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    function drawBackground() {
+      bgCtx.fillStyle = skyColor;
+      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-  bgCtx.fillStyle = grassColor;
-  bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+      bgCtx.fillStyle = grassColor;
+      bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
 
-  // Draw milestones
-  milestones.forEach((milestone) => {
-    const milestoneX = milestone.x - backgroundOffset;
-    if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
-      bgCtx.fillStyle = milestoneColor;
-      bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
+      // Draw milestones
+      milestones.forEach((milestone) => {
+        const milestoneX = milestone.x - backgroundOffset;
+        if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
+          bgCtx.fillStyle = milestoneColor;
+          bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
 
-      // Draw "año" and the year (moved closer to the top of the milestone)
-      bgCtx.fillStyle = "#404040"; // Dark grey text
-      bgCtx.font = milestoneFont;
-      bgCtx.textAlign = "center";
-      bgCtx.fillText(
-        "año", // "año" text
-        milestoneX + milestoneWidth / 2,
-        backgroundCanvas.height - grassHeight - milestoneHeight + 25 // Moved up
-      );
-      bgCtx.fillText(
-        milestone.year, // Year
-        milestoneX + milestoneWidth / 2,
-        backgroundCanvas.height - grassHeight - milestoneHeight + 45 // Moved up
-      );
-    }
-  });
+          bgCtx.fillStyle = "#404040"; // Dark grey text
+          bgCtx.font = milestoneFont;
+          bgCtx.textAlign = "center";
+          bgCtx.fillText("año", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
+          bgCtx.fillText(milestone.year, milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 45);
+        }
+      });
 
-      // Draw clouds
       drawClouds(bgCtx);
     }
 
-    // Update the character and background positions
+// Token properties
+const tokens = [
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 1500, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 2300, y: backgroundCanvas.height - grassHeight - 150 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 150 },
+];
+const tokenRadius = 25; // Increased size of the token
+const tokenColor = "#FF0000"; // Red color for the question mark
+
+// Draw tokens
+function drawTokens() {
+  tokens.forEach((token, index) => {
+    const tokenX = token.x - backgroundOffset;
+    if (tokenX > -tokenRadius && tokenX < backgroundCanvas.width + tokenRadius) {
+      // Draw the "?" as a red question mark without a background
+      bgCtx.fillStyle = tokenColor; // Red color for the "?"
+      bgCtx.font = "bold 54px Arial"; // Adjust the font size to make it more visible
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+      bgCtx.fillText("?", tokenX, token.y); // Position the question mark at the token's location
+    }
+  });
+}
+
+
+    // Check for token collection
+    function checkTokenCollection() {
+      tokens.forEach((token, index) => {
+        const tokenX = token.x - backgroundOffset;
+        if (
+          characterX < tokenX + tokenRadius &&
+          characterX + characterWidth > tokenX - tokenRadius &&
+          characterY < token.y + tokenRadius &&
+          characterY + characterHeight > token.y - tokenRadius
+        ) {
+          tokens.splice(index, 1); // Remove collected token
+          console.log(`Collected token at ${token.x}, ${token.y}`);
+        }
+      });
+    }
+
+    // Update positions
     function updatePositions() {
       if (keysPressed.left) {
         if (characterX > leftCutoff) {
@@ -219,7 +251,9 @@ function drawBackground() {
       charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
 
       drawBackground();
+      drawTokens();
       drawCharacter();
+      checkTokenCollection();
       updatePositions();
 
       frameCount++;
@@ -231,4 +265,3 @@ function drawBackground() {
   </script>
 </body>
 </html>
-
