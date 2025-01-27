@@ -1,268 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>16-Bit CV Game</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
+/*   
+// Obstacle properties
+const obstacles = [];
+const minSpeed = 2;
+const maxSpeed = 5;
+
+//create new obstacle
+function createObstacle() {
+  const obstacle = {
+    x: characterX + 1000, // Always 1000px to the right of the main character
+    y: backgroundCanvas.height - grassHeight + 70, // Position on the ground
+    width: 40,
+    height: 20,
+    speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
+  };
+  obstacles.push(obstacle);
+  console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
+}
+
+
+// Draw obstacles
+function drawObstacles() {
+  obstacles.forEach((obstacle, index) => {
+    // Move the obstacle based on its speed
+    obstacle.x -= obstacle.speed;
+
+    // If the obstacle moves off the screen, reset it
+    if (obstacle.x + obstacle.width < 0) {
+      obstacles.splice(index, 1);
+      createObstacle(); // create new obstacle
     }
 
-    canvas {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="gameCanvas"></canvas>
+    // Draw the obstacle considering the background offset
+    bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
+    bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
+  });
+}
 
-  <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    //CHECK OBSTACLE COLLISION
+    // Character's position adjusted by backgroundOffset
+    function checkObstacleCollision() {
+      obstacles.forEach((obstacle) => {
+        // Adjust the character's position relative to the background offset
+        const adjustedCharacterX = characterX - backgroundOffset;
 
-    const character = {
-      x: canvas.width / 2,
-      y: canvas.height - 120,
-      width: 50,
-      height: 50,
-      color: 'yellow',
-      yVelocity: 0,
-      isJumping: false,
-    };
+        // Log positions for debugging
+        console.log(`Character: x=${adjustedCharacterX}, y=${characterY}, width=${characterWidth}, height=${characterHeight}`);
+        console.log(`Obstacle: x=${obstacle.x}, y=${obstacle.y}, width=${obstacle.width}, height=${obstacle.height}`);
 
-    const keys = {
-      right: false,
-      left: false,
-      up: false,
-    };
-
-    const gravity = 0.5;
-
-    function handleKeys(e) {
-      const isKeyDown = e.type === 'keydown';
-      if (e.key === 'ArrowRight') keys.right = isKeyDown;
-      if (e.key === 'ArrowLeft') keys.left = isKeyDown;
-      if (e.key === 'ArrowUp') keys.up = isKeyDown;
-    }
-
-    document.addEventListener('keydown', handleKeys);
-    document.addEventListener('keyup', handleKeys);
-
-    function updateCharacter() {
-      if (keys.right) character.x += 5;
-      if (keys.left) character.x -= 5;
-
-      if (keys.up && !character.isJumping) {
-        character.yVelocity = -10;
-        character.isJumping = true;
-      }
-
-      character.y += character.yVelocity;
-      character.yVelocity += gravity;
-
-      if (character.y + character.height >= canvas.height - 70) {
-        character.y = canvas.height - 70 - character.height;
-        character.isJumping = false;
-      }
-    }
-
-    function drawCharacter() {
-      ctx.fillStyle = character.color;
-      ctx.fillRect(character.x, character.y, character.width, character.height);
-    }
-
-    function drawGround() {
-      ctx.fillStyle = 'green';
-      ctx.fillRect(0, canvas.height - 70, canvas.width, 70);
-    }
-
-    function drawTokens(tokens) {
-      tokens.forEach((token) => {
-        if (!token.collected) {
-          ctx.fillStyle = 'red';
-          ctx.font = '30px Arial';
-          ctx.fillText('?', token.x, token.y);
-        }
-      });
-    }
-
-    function checkTokenCollection(tokens) {
-      tokens.forEach((token) => {
+        // Collision detection between the character and obstacles
         if (
-          !token.collected &&
-          character.x < token.x + 20 &&
-          character.x + character.width > token.x &&
-          character.y < token.y + 20 &&
-          character.y + character.height > token.y
+          adjustedCharacterX < obstacle.x + obstacle.width &&
+          adjustedCharacterX + characterWidth > obstacle.x &&
+          characterY < obstacle.y + obstacle.height &&
+          characterY + characterHeight > obstacle.y
         ) {
-          token.collected = true;
-          console.log(`Collected token at (${token.x}, ${token.y})`);
+          alert("Game Over!");
+          resetGame();
         }
       });
     }
+    //END OF CHECK OBSTACLE COLLISION
+    */
 
-    const tokens = [
-      { x: 400, y: canvas.height - 150, collected: false },
-      { x: 800, y: canvas.height - 200, collected: false },
-      { x: 1200, y: canvas.height - 250, collected: false },
-      { x: 1600, y: canvas.height - 180, collected: false },
-    ];
 
-    function gameLoop() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      drawGround();
-      drawCharacter();
-      drawTokens(tokens);
-
-      updateCharacter();
-      checkTokenCollection(tokens);
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-  </script>
-</body>
-</html>
-
-<!-- character.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Character with Obstacles</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="background"></canvas>
-  <canvas id="characterCanvas"></canvas>
-
-  <script type="module">
-    // Canvas setup
-    const backgroundCanvas = document.getElementById("background");
-    const bgCtx = backgroundCanvas.getContext("2d");
-    const characterCanvas = document.getElementById("characterCanvas");
-    const charCtx = characterCanvas.getContext("2d");
-
-    // Set canvas size
-    backgroundCanvas.width = window.innerWidth;
-    backgroundCanvas.height = window.innerHeight;
-    characterCanvas.width = window.innerWidth;
-    characterCanvas.height = window.innerHeight;
-
-    // Background colors
-    const skyColor = "#87CEEB"; // Light blue sky
-    const grassColor = "#32CD32"; // Bright green grass
-    const grassHeight = backgroundCanvas.height / 4;
-
-    let backgroundOffset = 0;
-    const backgroundSpeed = 2;
-
-    // Character properties
-    let characterX = backgroundCanvas.width / 2;
-    let characterY = backgroundCanvas.height - grassHeight - 60;
-    const characterWidth = 40;
-    const characterHeight = 60;
-    const speed = 5;
-    const jumpHeight = 100;
-    let isJumping = false;
-    let jumpVelocity = 0;
-
-    // Key press event listener
-    let keysPressed = {
-      left: false,
-      right: false,
-      up: false
-    };
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") keysPressed.left = true;
-      if (e.key === "ArrowRight") keysPressed.right = true;
-      if (e.key === "ArrowUp" && !isJumping) {
-        isJumping = true;
-        jumpVelocity = -10; // Initial jump force
-      }
-    });
-
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "ArrowLeft") keysPressed.left = false;
-      if (e.key === "ArrowRight") keysPressed.right = false;
-      if (e.key === "ArrowUp") keysPressed.up = false;
-    });
-
-    // Function to draw the character
-    function drawCharacter() {
-      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
-      charCtx.fillStyle = "#FFD700"; // Gold for blonde
-      charCtx.fillRect(characterX, characterY, characterWidth, characterHeight);
-    }
-
-    // Obstacle properties
-    const obstacles = [];
-    const minSpeed = 2;
-    const maxSpeed = 5;
-
-    // Create new obstacle
-    function createObstacle() {
-      const obstacle = {
-        x: backgroundCanvas.width, // Start from the right
-        y: backgroundCanvas.height - grassHeight - 20, // Position on the ground
-        width: 40,
-        height: 20,
-        speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
-      };
-      obstacles.push(obstacle);
-      console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
-    }
-
-    // Draw obstacles
-    function drawObstacles() {
-      obstacles.forEach((obstacle, index) => {
-        // Move obstacle
-        obstacle.x -= obstacle.speed;
-
-        // If it moves off-screen, remove it and create a new one
-        if (obstacle.x + obstacle.width < 0) {
-          obstacles.splice(index, 1);
-          createObstacle();
-        }
-
-        // Draw the obstacle
-        bgCtx.fillStyle = "#FF4500"; // Orange color
-        bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
-      });
-    }
-
-    // Update positions (handles movement)
+    /*    
+    // Update positions
     function updatePositions() {
       if (keysPressed.left) {
-        if (characterX > backgroundCanvas.width / 2 - 450) {
+        if (characterX > leftCutoff) {
           characterX -= speed;
         } else {
           backgroundOffset -= backgroundSpeed;
         }
       }
       if (keysPressed.right) {
-        if (characterX < backgroundCanvas.width / 2 + 100) {
+        if (characterX < rightCutoff) {
           characterX += speed;
         } else {
           backgroundOffset += backgroundSpeed;
@@ -281,24 +94,5 @@
       if (characterX < 0) characterX = 0;
     }
 
-    // Render loop
-    function render() {
-      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
-
-      drawCharacter();
-      drawObstacles(); // Draw obstacles on the background
-      updatePositions();
-
-      requestAnimationFrame(render);
-    }
-
-    let frameCount = 0;
-
-    // Create initial obstacle
-    createObstacle();
-
-    render();
-  </script>
-</body>
-</html>
+   
+*/

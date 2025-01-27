@@ -149,76 +149,16 @@
     }
 
    ////////////
-   ///////////
-/*   
-// Obstacle properties
-const obstacles = [];
-const minSpeed = 2;
-const maxSpeed = 5;
-
-//create new obstacle
-function createObstacle() {
-  const obstacle = {
-    x: characterX + 1000, // Always 1000px to the right of the main character
-    y: backgroundCanvas.height - grassHeight + 70, // Position on the ground
-    width: 40,
-    height: 20,
-    speed: Math.random() * (maxSpeed - minSpeed) + minSpeed // Random speed between min and max
-  };
-  obstacles.push(obstacle);
-  console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
-}
-
-
-// Draw obstacles
-function drawObstacles() {
-  obstacles.forEach((obstacle, index) => {
-    // Move the obstacle based on its speed
-    obstacle.x -= obstacle.speed;
-
-    // If the obstacle moves off the screen, reset it
-    if (obstacle.x + obstacle.width < 0) {
-      obstacles.splice(index, 1);
-      createObstacle(); // create new obstacle
-    }
-
-    // Draw the obstacle considering the background offset
-    bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
-    bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
-  });
-}
-
-
-    //CHECK OBSTACLE COLLISION
-    // Character's position adjusted by backgroundOffset
-    function checkObstacleCollision() {
-      obstacles.forEach((obstacle) => {
-        // Adjust the character's position relative to the background offset
-        const adjustedCharacterX = characterX - backgroundOffset;
-
-        // Log positions for debugging
-        console.log(`Character: x=${adjustedCharacterX}, y=${characterY}, width=${characterWidth}, height=${characterHeight}`);
-        console.log(`Obstacle: x=${obstacle.x}, y=${obstacle.y}, width=${obstacle.width}, height=${obstacle.height}`);
-
-        // Collision detection between the character and obstacles
-        if (
-          adjustedCharacterX < obstacle.x + obstacle.width &&
-          adjustedCharacterX + characterWidth > obstacle.x &&
-          characterY < obstacle.y + obstacle.height &&
-          characterY + characterHeight > obstacle.y
-        ) {
-          alert("Game Over!");
-          resetGame();
-        }
-      });
-    }
-    //END OF CHECK OBSTACLE COLLISION
-    */
+  
    // Initialize obstacles (with random speed and position)
 const obstacles = [
-  { x: 800, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
-  { x: 1200, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 },
-  { x: 1600, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 }
+  { x: 800, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 1500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 2500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 3500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 4500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 5500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 6600, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }
 ];
 
 // Update positions of obstacles
@@ -259,11 +199,20 @@ function checkObstacleCollision() {
       characterY < obstacle.y + obstacle.height &&
       characterY + characterHeight > obstacle.y
     ) {
-      alert("Game Over!");
-      resetGame();
+      //alert("YOU HAVE HIT AN OBSTACLE.. BUT THIS IS NOT GAME OVER! In life we often encounter difficulties and setbacks..and pursuing the career of our dreams is no different.. but obstacles exist to teach us, and show us how strong we are. Now get up, keep walking forward, and try again.. your journey to programming greatness continues!");
+      //resetGame();
+      console.log('hi');
     }
   });
 }
+
+//RESET THE GAME AFTER LOSING:
+function resetGame() {
+  // Redirect to the index.html page (the main menu or starting point)
+  window.location.href = "index.html";
+}
+
+
 // Update positions of everything
 function updatePositions() {
   // Update character position (left, right, jumping)
@@ -296,9 +245,7 @@ function updatePositions() {
   // Update obstacle positions
   updateObstacles();
 }
-
-
-   ///////////////////
+   
 
     // Draw the background
     function drawBackground() {
@@ -380,38 +327,6 @@ function drawTokens() {
       });
     }
 
-/*    
-    // Update positions
-    function updatePositions() {
-      if (keysPressed.left) {
-        if (characterX > leftCutoff) {
-          characterX -= speed;
-        } else {
-          backgroundOffset -= backgroundSpeed;
-        }
-      }
-      if (keysPressed.right) {
-        if (characterX < rightCutoff) {
-          characterX += speed;
-        } else {
-          backgroundOffset += backgroundSpeed;
-        }
-      }
-
-      if (isJumping) {
-        characterY += jumpVelocity;
-        jumpVelocity += 0.5;
-        if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
-          characterY = backgroundCanvas.height - grassHeight - characterHeight;
-          isJumping = false;
-        }
-      }
-
-      if (characterX < 0) characterX = 0;
-    }
-
-   
-*/
 
 
 function render() {
