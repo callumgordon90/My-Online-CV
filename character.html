@@ -150,6 +150,7 @@
 
    ////////////
    ///////////
+/*   
 // Obstacle properties
 const obstacles = [];
 const minSpeed = 2;
@@ -172,20 +173,130 @@ function createObstacle() {
 // Draw obstacles
 function drawObstacles() {
   obstacles.forEach((obstacle, index) => {
-    // Move obstacle
+    // Move the obstacle based on its speed
     obstacle.x -= obstacle.speed;
 
-    // If it moves off-screen, remove it and create a new one
+    // If the obstacle moves off the screen, reset it
     if (obstacle.x + obstacle.width < 0) {
       obstacles.splice(index, 1);
-      createObstacle();
+      createObstacle(); // create new obstacle
     }
 
-    // Draw the obstacle
-    bgCtx.fillStyle = "#FF4500"; // Orange color
+    // Draw the obstacle considering the background offset
+    bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
     bgCtx.fillRect(obstacle.x - backgroundOffset, obstacle.y, obstacle.width, obstacle.height);
   });
 }
+
+
+    //CHECK OBSTACLE COLLISION
+    // Character's position adjusted by backgroundOffset
+    function checkObstacleCollision() {
+      obstacles.forEach((obstacle) => {
+        // Adjust the character's position relative to the background offset
+        const adjustedCharacterX = characterX - backgroundOffset;
+
+        // Log positions for debugging
+        console.log(`Character: x=${adjustedCharacterX}, y=${characterY}, width=${characterWidth}, height=${characterHeight}`);
+        console.log(`Obstacle: x=${obstacle.x}, y=${obstacle.y}, width=${obstacle.width}, height=${obstacle.height}`);
+
+        // Collision detection between the character and obstacles
+        if (
+          adjustedCharacterX < obstacle.x + obstacle.width &&
+          adjustedCharacterX + characterWidth > obstacle.x &&
+          characterY < obstacle.y + obstacle.height &&
+          characterY + characterHeight > obstacle.y
+        ) {
+          alert("Game Over!");
+          resetGame();
+        }
+      });
+    }
+    //END OF CHECK OBSTACLE COLLISION
+    */
+   // Initialize obstacles (with random speed and position)
+const obstacles = [
+  { x: 800, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 1200, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 1600, y: backgroundCanvas.height - grassHeight - 30, width: 40, height: 30, speed: Math.random() * 2 + 1 }
+];
+
+// Update positions of obstacles
+function updateObstacles() {
+  obstacles.forEach(obstacle => {
+    obstacle.x -= obstacle.speed; // Move obstacle left by speed
+
+    // Reset obstacle position to the right side once it goes off-screen
+    if (obstacle.x + obstacle.width < 0) {
+      obstacle.x = backgroundCanvas.width;
+      obstacle.speed = Math.random() * 2 + 1; // Random speed for each loop
+    }
+  });
+}
+
+// Draw obstacles
+function drawObstacles() {
+  obstacles.forEach(obstacle => {
+    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+
+    // Only draw obstacles within the visible area
+    if (obstacleX + obstacle.width > 0 && obstacleX < backgroundCanvas.width) {
+      bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
+      bgCtx.fillRect(obstacleX, obstacle.y, obstacle.width, obstacle.height);
+    }
+  });
+}
+
+// Check for obstacle collision
+function checkObstacleCollision() {
+  obstacles.forEach((obstacle, index) => {
+    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+
+    // Collision detection between the character and obstacles
+    if (
+      characterX < obstacleX + obstacle.width &&
+      characterX + characterWidth > obstacleX &&
+      characterY < obstacle.y + obstacle.height &&
+      characterY + characterHeight > obstacle.y
+    ) {
+      alert("Game Over!");
+      resetGame();
+    }
+  });
+}
+// Update positions of everything
+function updatePositions() {
+  // Update character position (left, right, jumping)
+  if (keysPressed.left) {
+    if (characterX > leftCutoff) {
+      characterX -= speed;
+    } else {
+      backgroundOffset -= backgroundSpeed;
+    }
+  }
+  if (keysPressed.right) {
+    if (characterX < rightCutoff) {
+      characterX += speed;
+    } else {
+      backgroundOffset += backgroundSpeed;
+    }
+  }
+
+  if (isJumping) {
+    characterY += jumpVelocity;
+    jumpVelocity += 0.5;
+    if (characterY >= backgroundCanvas.height - grassHeight - characterHeight) {
+      characterY = backgroundCanvas.height - grassHeight - characterHeight;
+      isJumping = false;
+    }
+  }
+
+  if (characterX < 0) characterX = 0;
+
+  // Update obstacle positions
+  updateObstacles();
+}
+
 
    ///////////////////
 
@@ -269,6 +380,7 @@ function drawTokens() {
       });
     }
 
+/*    
     // Update positions
     function updatePositions() {
       if (keysPressed.left) {
@@ -298,51 +410,8 @@ function drawTokens() {
       if (characterX < 0) characterX = 0;
     }
 
-    // Check for collision between the character and obstacles
-function checkCollision() {
-  obstacles.forEach((obstacle) => {
-    const obstacleLeft = obstacle.x;
-    const obstacleRight = obstacle.x + obstacle.width;
-    const obstacleTop = obstacle.y;
-    const obstacleBottom = obstacle.y + obstacle.height;
-
-    const characterLeft = characterX;
-    const characterRight = characterX + characterWidth;
-    const characterTop = characterY;
-    const characterBottom = characterY + characterHeight;
-
-    // Check if the character and the obstacle overlap
-    if (
-      characterRight > obstacleLeft &&
-      characterLeft < obstacleRight &&
-      characterBottom > obstacleTop &&
-      characterTop < obstacleBottom
-    ) {
-      gameOver(); // Trigger game over if there's a collision
-    }
-  });
-}
-
-// Handle the game over logic
-function gameOver() {
-  alert("Game Over!");
-  resetGame();
-}
-
-// Reset the game to the initial state
-function resetGame() {
-  // Reset character position
-  characterX = backgroundCanvas.width / 2;
-  characterY = backgroundCanvas.height - grassHeight - 60;
-  
-  // Reset background offset
-  backgroundOffset = 0;
-
-  // Clear obstacles and create the initial one
-  obstacles.length = 0;
-  createObstacle();
-} 
-
+   
+*/
 
 
 function render() {
@@ -354,8 +423,8 @@ function render() {
   drawCharacter();
   drawObstacles();
   checkTokenCollection();
+  checkObstacleCollision();
   updatePositions();
-  checkCollision();  // Check for collisions between the character and obstacles
 
 
   frameCount++;
@@ -366,7 +435,7 @@ function render() {
     let frameCount = 0;
 
      // Create initial obstacle
-     createObstacle();
+     //createObstacle();
 
     render();
   </script>
