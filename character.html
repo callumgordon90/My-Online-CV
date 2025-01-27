@@ -174,7 +174,36 @@ function updateObstacles() {
   });
 }
 
-// Draw obstacles
+function drawObstacles() {
+  obstacles.forEach(obstacle => {
+    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+
+    // Only draw obstacles within the visible area
+    if (obstacleX + obstacle.width > 0 && obstacleX < backgroundCanvas.width) {
+      // Draw the skull
+      const skullSize = 20; // Base size for the skull
+      const eyeSize = 5;
+      const toothSize = 3;
+
+      // Skull base (head)
+      bgCtx.fillStyle = "#FFFFFF"; // White skull
+      bgCtx.fillRect(obstacleX, obstacle.y, skullSize, skullSize);
+
+      // Eyes
+      bgCtx.fillStyle = "#000000"; // Black eyes
+      bgCtx.fillRect(obstacleX + 5, obstacle.y + 5, eyeSize, eyeSize); // Left eye
+      bgCtx.fillRect(obstacleX + skullSize - 10, obstacle.y + 5, eyeSize, eyeSize); // Right eye
+
+      // Teeth (grid of small squares at the bottom)
+      bgCtx.fillRect(obstacleX + 6, obstacle.y + skullSize - 6, toothSize, toothSize); // First tooth
+      bgCtx.fillRect(obstacleX + 12, obstacle.y + skullSize - 6, toothSize, toothSize); // Second tooth
+    }
+  });
+}
+
+
+
+/*
 function drawObstacles() {
   obstacles.forEach(obstacle => {
     const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
@@ -186,6 +215,7 @@ function drawObstacles() {
     }
   });
 }
+*/
 
 // Check for obstacle collision
 function checkObstacleCollision() {

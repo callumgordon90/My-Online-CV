@@ -16,3 +16,43 @@ body {
     z-index: 2; /* Character layer above background */
   }
   
+  /* Obstacle styles */
+/* Spider style */
+.spider {
+  width: 40px;
+  height: 30px;
+  background-color: black; /* Black body */
+  border-radius: 50%; /* Rounded shape for the body */
+  position: relative;
+}
+
+/* Spider legs */
+.spider::before,
+.spider::after {
+  content: '';
+  position: absolute;
+  width: 60px; /* Length of legs */
+  height: 4px; /* Thickness of legs */
+  background-color: black;
+}
+
+.spider::before {
+  top: 5px;
+  left: -30px; /* Offset legs from the body */
+  transform: rotate(45deg);
+}
+
+.spider::after {
+  bottom: 5px;
+  left: -30px;
+  transform: rotate(-45deg);
+}
+
+
+.snake {
+  width: 40px;
+  height: 30px;
+  background-image: url('path/to/snake.png'); /* Replace with your snake image URL */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
