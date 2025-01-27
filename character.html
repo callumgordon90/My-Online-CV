@@ -155,10 +155,10 @@ const obstacles = [];
 const minSpeed = 2;
 const maxSpeed = 5;
 
-// Create new obstacle
+//create new obstacle
 function createObstacle() {
   const obstacle = {
-    x: backgroundCanvas.width, // Start from the right
+    x: characterX + 1000, // Always 1000px to the right of the main character
     y: backgroundCanvas.height - grassHeight + 70, // Position on the ground
     width: 40,
     height: 20,
@@ -167,6 +167,7 @@ function createObstacle() {
   obstacles.push(obstacle);
   console.log(`Created obstacle with speed: ${obstacle.speed}`); // Debugging output
 }
+
 
 // Draw obstacles
 function drawObstacles() {
@@ -297,24 +298,70 @@ function drawTokens() {
       if (characterX < 0) characterX = 0;
     }
 
-    
+    // Check for collision between the character and obstacles
+function checkCollision() {
+  obstacles.forEach((obstacle) => {
+    const obstacleLeft = obstacle.x;
+    const obstacleRight = obstacle.x + obstacle.width;
+    const obstacleTop = obstacle.y;
+    const obstacleBottom = obstacle.y + obstacle.height;
 
+    const characterLeft = characterX;
+    const characterRight = characterX + characterWidth;
+    const characterTop = characterY;
+    const characterBottom = characterY + characterHeight;
 
-    // Render loop
-    function render() {
-      bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-      charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
-
-      drawBackground();
-      drawTokens();
-      drawCharacter();
-      drawObstacles();
-      checkTokenCollection();
-      updatePositions();
-
-      frameCount++;
-      requestAnimationFrame(render);
+    // Check if the character and the obstacle overlap
+    if (
+      characterRight > obstacleLeft &&
+      characterLeft < obstacleRight &&
+      characterBottom > obstacleTop &&
+      characterTop < obstacleBottom
+    ) {
+      gameOver(); // Trigger game over if there's a collision
     }
+  });
+}
+
+// Handle the game over logic
+function gameOver() {
+  alert("Game Over!");
+  resetGame();
+}
+
+// Reset the game to the initial state
+function resetGame() {
+  // Reset character position
+  characterX = backgroundCanvas.width / 2;
+  characterY = backgroundCanvas.height - grassHeight - 60;
+  
+  // Reset background offset
+  backgroundOffset = 0;
+
+  // Clear obstacles and create the initial one
+  obstacles.length = 0;
+  createObstacle();
+} 
+
+
+
+function render() {
+  bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+  charCtx.clearRect(0, 0, characterCanvas.width, characterCanvas.height);
+
+  drawBackground();
+  drawTokens();
+  drawCharacter();
+  drawObstacles();
+  checkTokenCollection();
+  updatePositions();
+  checkCollision();  // Check for collisions between the character and obstacles
+
+
+  frameCount++;
+  requestAnimationFrame(render);
+}
+
 
     let frameCount = 0;
 
