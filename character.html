@@ -23,7 +23,7 @@
   <canvas id="characterCanvas"></canvas>
 
   <script type="module">
-    import { drawClouds } from './background.js';
+    import { drawClouds, drawCloud } from './background.js';
 
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
@@ -368,8 +368,8 @@ function drawTokens() {
 ];
 
 
-const panelWidth = 200;
-const panelHeight = 100;
+const panelWidth = 300;
+const panelHeight = 300;
 const panelColor = "#FFFF00"; // Yellow color for the panel
 
 //drawPanels
