@@ -289,22 +289,22 @@ function updatePositions() {
 
 // Token properties
 const tokens = [
-  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, t: 1 },
-  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, t: 2 },
-  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, t: 3 },
-  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, t: 4 },
-  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, t: 5 },
-  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, t: 6 },
-  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, t: 7 },
-  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, t: 8 },
-  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, t: 9 },
-  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, t: 10 },
-  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, t: 11 },
-  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, t: 12 },
-  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, t: 13 },
-  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, t: 14 },
-  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, t: 15 },
-  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, t: 16},
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, t: 0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, t: 1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, t: 2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, t: 3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, t: 4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, t: 5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, t: 6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, t: 7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, t: 8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, t: 9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, t: 10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, t: 11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, t: 12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, t: 13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, t: 14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, t: 15 },
 ];
 const tokenRadius = 25; // Increased size of the token
 const tokenColor = "#FF0000"; // Red color for the question mark
@@ -349,22 +349,22 @@ function drawTokens() {
 
 
     const panels = [
-  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: 'One', visible: false },
-  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: 'Two', visible: false },
-  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: 'Three', visible: false },
-  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: 'Four', visible: false },
-  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: 'Five', visible: false },
-  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: 'Six', visible: false },
-  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: 'Seven', visible: false },
-  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false },
-  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false },
-  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false },
-  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, text: 'Eleven', visible: false },
-  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, text: 'Twelve', visible: false },
-  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, text: 'Thirteen', visible: false },
-  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, text: 'Fourteen', visible: false },
-  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, text: 'Fifteen', visible: false },
-  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, text: 'Sixteen', visible: false },
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: 'One', visible: false, p:0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: 'Two', visible: false, p:1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: 'Three', visible: false, p:2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: 'Four', visible: false, p:3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: 'Five', visible: false, p:4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: 'Six', visible: false, p:5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: 'Seven', visible: false, p:6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false, p:7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false, p:8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false, p:9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, text: 'Eleven', visible: false, p:10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, text: 'Twelve', visible: false, p:11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, text: 'Thirteen', visible: false, p:12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, text: 'Fourteen', visible: false, p:13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, text: 'Fifteen', visible: false, p:14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, text: 'Sixteen', visible: false, p:15 },
 ];
 
 
@@ -394,6 +394,7 @@ function drawPanels() {
 
 
 function showPanel(panelIndex) {
+  console.log(`called the showPanel function with index of ${panelIndex}`);
   if (panelIndex >= 0 && panelIndex < panels.length) {
     panels[panelIndex].visible = true; // Now it's safe to access the visible property
   } else {
