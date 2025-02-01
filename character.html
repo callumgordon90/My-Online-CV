@@ -150,11 +150,11 @@
 
    ////////////
   
-// Initialize obstacles (with random speed and position)
+// Initialize obstacles 
 const obstacles = [
-  { x: 800, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: 2 }, // Random speed
   { x: 1200, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: 2 },
-  { x: 1600, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: 2 }
+  { x: 1600, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: 2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: 2 }
 ];
 
 // Update positions of obstacles
@@ -186,22 +186,32 @@ function drawObstacles() {
   });
 }
 
+
+
 /// Check for obstacle collision
 function checkObstacleCollision() {
   obstacles.forEach((obstacle, index) => {
     const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+    
 
     // Collision detection between the character and obstacles
     if (
-      characterX < obstacleX + obstacle.width &&
-      characterX + characterWidth > obstacleX &&
-      characterY < obstacle.y + obstacle.height &&
-      characterY + characterHeight > obstacle.y  
-
+      
+    characterX + characterWidth > obstacleX &&  // Character's right side is past obstacle's left side
+    characterX < obstacleX + obstacle.width &&  // Character's left side is before obstacle's right side
+    characterY + characterHeight > obstacle.y &&  // Character's bottom is past obstacle's top
+    characterY < obstacle.y + obstacle.height + grassHeight    // Character's top is above obstacle's bottom 
+      
     ) {
-
+      //console.log('ITS A HIT');
       alert("YOU HAVE HIT AN OBSTACLE.. BUT THIS IS NOT GAME OVER! In life we often encounter difficulties and setbacks..and pursuing the career of our dreams is no different.. but obstacles exist to teach us, and show us how strong we are. Now get up, keep walking forward, and try again.. your journey to programming greatness continues!");
       resetGame();
+    } else {
+      console.log("Character X and Obstacle X: ", characterX, obstacleX);
+      console.log("Character Y and Obstacle Y: ", characterY, obstacle.y);
+      //console.log(obstacleX);
+      //console.log(obstacle.y);
+
     }
   });
 }
@@ -417,10 +427,6 @@ function render() {
 
 
     let frameCount = 0;
-
-     // Create initial obstacle
-     //createObstacle();
-
     render();
   </script>
 </body>
