@@ -23,7 +23,7 @@
   <canvas id="characterCanvas"></canvas>
 
   <script type="module">
-    import { drawClouds } from './background.js';
+    import { drawClouds, drawCloud } from './background.js';
 
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
@@ -152,13 +152,13 @@
   
    // Initialize obstacles (with random speed and position)
 const obstacles = [
-  { x: 800, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
-  { x: 1500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 1000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
   { x: 2500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
-  { x: 3500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
-  { x: 4500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
-  { x: 5500, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
-  { x: 6600, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }
+  { x: 7000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 9000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 12000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 },
+  { x: 17000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }, // Random speed
+  { x: 19000, y: backgroundCanvas.height - grassHeight + 60, width: 40, height: 30, speed: Math.random() * 2 + 1 }
 ];
 
 // Update positions of obstacles
@@ -289,22 +289,22 @@ function updatePositions() {
 
 // Token properties
 const tokens = [
-  { x: 1000, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 1400, y: backgroundCanvas.height - grassHeight - 70 },
-  { x: 1800, y: backgroundCanvas.height - grassHeight - 140 },
-  { x: 2200, y: backgroundCanvas.height - grassHeight - 15 },
-  { x: 2600, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 3000, y: backgroundCanvas.height - grassHeight - 70 },
-  { x: 3400, y: backgroundCanvas.height - grassHeight - 140 },
-  { x: 3800, y: backgroundCanvas.height - grassHeight - 15 },
-  { x: 4200, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 4600, y: backgroundCanvas.height - grassHeight - 70 },
-  { x: 5000, y: backgroundCanvas.height - grassHeight - 140 },
-  { x: 5400, y: backgroundCanvas.height - grassHeight - 15 },
-  { x: 5800, y: backgroundCanvas.height - grassHeight - 150 },
-  { x: 6200, y: backgroundCanvas.height - grassHeight - 70 },
-  { x: 6600, y: backgroundCanvas.height - grassHeight - 140 },
-  { x: 7000, y: backgroundCanvas.height - grassHeight - 15 },
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, t: 0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, t: 1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, t: 2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, t: 3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, t: 4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, t: 5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, t: 6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, t: 7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, t: 8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, t: 9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, t: 10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, t: 11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, t: 12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, t: 13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, t: 14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, t: 15 },
 ];
 const tokenRadius = 25; // Increased size of the token
 const tokenColor = "#FF0000"; // Red color for the question mark
@@ -324,7 +324,7 @@ function drawTokens() {
   });
 }
 
-
+  
     // Check for token collection
     function checkTokenCollection() {
       tokens.forEach((token, index) => {
@@ -335,12 +335,76 @@ function drawTokens() {
           characterY < token.y + tokenRadius &&
           characterY + characterHeight > token.y - tokenRadius
         ) {
-          tokens.splice(index, 1); // Remove collected token
-          console.log(`Collected token at ${token.x}, ${token.y}`);
+          // Remove the token and show the panel
+          tokens.splice(index, 1);
+          console.log(`Collected token at ${token.x}, ${token.y}, ${token.t}`);
+          console.log(`Token index in array: ${token.t}`);
+
+          // Show the corresponding panel text ('one', 'two', etc.)
+          showPanel(token.t); // Adjust based on the token index
+          console.log(token.t);
         }
       });
     }
 
+
+    const panels = [
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: 'One', visible: false, p:0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: 'Two', visible: false, p:1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: 'Three', visible: false, p:2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: 'Four', visible: false, p:3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: 'Five', visible: false, p:4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: 'Six', visible: false, p:5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: 'Seven', visible: false, p:6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false, p:7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false, p:8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false, p:9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, text: 'Eleven', visible: false, p:10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, text: 'Twelve', visible: false, p:11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, text: 'Thirteen', visible: false, p:12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, text: 'Fourteen', visible: false, p:13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, text: 'Fifteen', visible: false, p:14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, text: 'Sixteen', visible: false, p:15 },
+];
+
+
+const panelWidth = 300;
+const panelHeight = 300;
+const panelColor = "#FFFF00"; // Yellow color for the panel
+
+//drawPanels
+function drawPanels() {
+  panels.forEach((panel, index) => {
+    const panelX = panel.x - backgroundOffset;
+    if (panelX > -panelWidth && panelX < backgroundCanvas.width + panelWidth && panel.visible) {
+      // Draw yellow panel
+      bgCtx.fillStyle = panelColor;
+      bgCtx.fillRect(panelX, panel.y - panelHeight, panelWidth, panelHeight); // Panel background
+
+      // Draw the text inside the panel
+      bgCtx.fillStyle = "#000000"; // Black color for text
+      bgCtx.font = "bold 20px Arial"; // Adjust the font size for the text
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+      bgCtx.fillText(panel.text, panelX + panelWidth / 2, panel.y - panelHeight / 2); // Position the text inside the panel
+    }
+  });
+}
+
+
+
+function showPanel(panelIndex) {
+  console.log(`called the showPanel function with index of ${panelIndex}`);
+  if (panelIndex >= 0 && panelIndex < panels.length) {
+    panels[panelIndex].visible = true; // Now it's safe to access the visible property
+  } else {
+    console.log(`Invalid panel index: ${panelIndex}`);
+  }
+}
+
+
+
+    /////
 
 
 function render() {
@@ -352,6 +416,7 @@ function render() {
   drawCharacter();
   drawObstacles();
   checkTokenCollection();
+  drawPanels();
   checkObstacleCollision();
   updatePositions();
 
@@ -370,3 +435,4 @@ function render() {
   </script>
 </body>
 </html>
+
