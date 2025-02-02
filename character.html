@@ -185,8 +185,12 @@ function drawObstacles() {
 }
 
 const scaleFactor = 1.25;
+let lastCollisionTime = 0; // To store the last time a collision was logged
+const collisionCooldown = 2000; // 2 seconds (in milliseconds)
 
 function checkObstacleCollision() {
+    const currentTime = Date.now(); // Get the current timestamp
+
     obstacles.forEach((obstacle) => {
         const obstacleX = obstacle.x - backgroundOffset;
         const obstacleY = obstacle.y;
@@ -211,13 +215,18 @@ function checkObstacleCollision() {
                                       obstacleY < rightShoeY + 4 * scaleFactor &&
                                       obstacleY + obstacleHeight > rightShoeY;
 
-        // If either shoe collides with the obstacle
-        if (isLeftShoeColliding || isRightShoeColliding) {
+        // If either shoe collides with the obstacle and enough time has passed since last collision
+        if ((isLeftShoeColliding || isRightShoeColliding) && (currentTime - lastCollisionTime >= collisionCooldown)) {
             console.log("Shoe collision detected!");
+
+            // Update the last collision time
+            lastCollisionTime = currentTime;
+            
             // Handle the collision (e.g., Game Over or reset)
         }
     });
 }
+
 
 //RESET THE GAME AFTER LOSING:
 function resetGame() {
