@@ -42,9 +42,25 @@
     const grassColor = "#32CD32"; // Bright green grass
     const grassHeight = backgroundCanvas.height / 4;
 
-    //
+    // Milestone properties
+    const milestones = [
+      { year: "2020", x: 800 },
+      { year: "2021", x: 1800 },
+      { year: "2022", x: 2800 },
+      { year: "2023", x: 3800 },
+      { year: "2024", x: 4800 },
+      { year: "2025", x: 5800 },
+    ];
+    const milestoneColor = "#808080"; // Grey for menhirs
+    const milestoneWidth = 80;
+    const milestoneHeight = 100;
+    const milestoneFont = "bold 20px Arial";
+
     let backgroundOffset = 0;
     const backgroundSpeed = 2;
+
+    
+
 
     // Character properties
     let characterX = backgroundCanvas.width / 2;
@@ -134,10 +150,65 @@
       charCtx.fillRect(characterX + 24 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor);
       charCtx.fillRect(characterX + 88 * scaleFactor, characterY + 64 * scaleFactor, 16 * scaleFactor, 16 * scaleFactor);
     }
+/*
+   ////////////
+  //define ground level:
+  const groundLevel = backgroundCanvas.height - grassHeight / 1.5 ;
+// Initialize obstacles 
+const obstacles = [
+  { x: 1200, y: groundLevel - 60, width: 40, height: 30, speed: 2 },
+  { x: 1600, y: groundLevel - 50, width: 40, height: 30, speed: 2 },
+  { x: 2200, y: groundLevel - 40, width: 40, height: 30, speed: 2 } // Now correctly positioned
+];
 
-////////////
-  
+// Update positions of obstacles
+function updateObstacles() {
+  obstacles.forEach(obstacle => {
+    obstacle.x -= obstacle.speed; // Move obstacle left by speed
 
+    
+  });
+}
+
+
+// Draw obstacles
+function drawObstacles() {
+  obstacles.forEach(obstacle => {
+    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+
+    // Only draw obstacles within the visible area
+    if (obstacleX + obstacle.width > 0 && obstacleX < backgroundCanvas.width) {
+      bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
+      bgCtx.fillRect(obstacleX, obstacle.y, obstacle.width, obstacle.height);
+    }
+  });
+}
+
+
+
+function checkObstacleCollision() {
+    obstacles.forEach((obstacle) => {
+        const obstacleX = obstacle.x - backgroundOffset;
+        const obstacleY = obstacle.y; // Consider if the background offset also affects the Y-coordinate
+        const isXColliding = characterX < obstacleX + obstacle.width && characterX + characterWidth > obstacleX;
+        const isYColliding = characterY < obstacleY + obstacle.height && characterY + characterHeight > obstacleY;
+
+        if (isXColliding && isYColliding) {
+            console.log("Obstacle hit!");
+            // Handle the collision (e.g., Game Over or reset)
+        }
+    });
+}
+
+
+
+//RESET THE GAME AFTER LOSING:
+function resetGame() {
+  // Redirect to the index.html page (the main menu or starting point)
+  window.location.href = "index.html";
+}
+
+*/
 // Update positions of everything
 function updatePositions() {
   // Update character position (left, right, jumping)
@@ -182,10 +253,143 @@ function updatePositions() {
       bgCtx.fillStyle = grassColor;
       bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
 
-      
+      // Draw milestones
+      milestones.forEach((milestone) => {
+        const milestoneX = milestone.x - backgroundOffset;
+        if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
+          bgCtx.fillStyle = milestoneColor;
+          bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
+
+          bgCtx.fillStyle = "#404040"; // Dark grey text
+          bgCtx.font = milestoneFont;
+          bgCtx.textAlign = "center";
+          bgCtx.fillText("año", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
+          bgCtx.fillText(milestone.year, milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 45);
+        }
+      });
+
+      drawClouds(bgCtx);
     }
 
-////
+ /*   
+// Token properties
+const tokens = [
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, t: 0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, t: 1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, t: 2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, t: 3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, t: 4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, t: 5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, t: 6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 40, t: 7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, t: 8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, t: 9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, t: 10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, t: 11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, t: 12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, t: 13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, t: 14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, t: 15 },
+];
+const tokenRadius = 25; // Increased size of the token
+const tokenColor = "#FF0000"; // Red color for the question mark
+
+// Draw tokens
+function drawTokens() {
+  tokens.forEach((token, index) => {
+    const tokenX = token.x - backgroundOffset;
+    if (tokenX > -tokenRadius && tokenX < backgroundCanvas.width + tokenRadius) {
+      // Draw the "?" as a red question mark without a background
+      bgCtx.fillStyle = tokenColor; // Red color for the "?"
+      bgCtx.font = "bold 54px Arial"; // Adjust the font size to make it more visible
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+      bgCtx.fillText("?", tokenX, token.y); // Position the question mark at the token's location
+    }
+  });
+}
+
+  
+    // Check for token collection
+    function checkTokenCollection() {
+      tokens.forEach((token, index) => {
+        const tokenX = token.x - backgroundOffset;
+        if (
+          characterX < tokenX + tokenRadius &&
+          characterX + characterWidth > tokenX - tokenRadius &&
+          characterY < token.y + tokenRadius &&
+          characterY + characterHeight > token.y - tokenRadius
+        ) {
+          // Remove the token and show the panel
+          tokens.splice(index, 1);
+          console.log(`Collected token at ${token.x}, ${token.y}, ${token.t}`);
+          console.log(`Token index in array: ${token.t}`);
+
+          // Show the corresponding panel text ('one', 'two', etc.)
+          showPanel(token.t); // Adjust based on the token index
+          console.log(token.t);
+        }
+      });
+    }
+
+
+    const panels = [
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: 'One', visible: false, p:0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: 'Two', visible: false, p:1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: 'Three', visible: false, p:2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: 'Four', visible: false, p:3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: 'Five', visible: false, p:4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: 'Six', visible: false, p:5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: 'Seven', visible: false, p:6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false, p:7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false, p:8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false, p:9 },
+  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, text: 'Eleven', visible: false, p:10 },
+  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, text: 'Twelve', visible: false, p:11 },
+  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, text: 'Thirteen', visible: false, p:12 },
+  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, text: 'Fourteen', visible: false, p:13 },
+  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, text: 'Fifteen', visible: false, p:14 },
+  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, text: 'Sixteen', visible: false, p:15 },
+];
+
+
+const panelWidth = 300;
+const panelHeight = 300;
+const panelColor = "#FFFF00"; // Yellow color for the panel
+
+//drawPanels
+function drawPanels() {
+  panels.forEach((panel, index) => {
+    const panelX = panel.x - backgroundOffset;
+    if (panelX > -panelWidth && panelX < backgroundCanvas.width + panelWidth && panel.visible) {
+      // Draw yellow panel
+      bgCtx.fillStyle = panelColor;
+      bgCtx.fillRect(panelX, panel.y - panelHeight, panelWidth, panelHeight); // Panel background
+
+      // Draw the text inside the panel
+      bgCtx.fillStyle = "#000000"; // Black color for text
+      bgCtx.font = "bold 20px Arial"; // Adjust the font size for the text
+      bgCtx.textAlign = "center";
+      bgCtx.textBaseline = "middle";
+      bgCtx.fillText(panel.text, panelX + panelWidth / 2, panel.y - panelHeight / 2); // Position the text inside the panel
+    }
+  });
+}
+
+
+
+function showPanel(panelIndex) {
+  console.log(`called the showPanel function with index of ${panelIndex}`);
+  if (panelIndex >= 0 && panelIndex < panels.length) {
+    panels[panelIndex].visible = true; // Now it's safe to access the visible property
+  } else {
+    console.log(`Invalid panel index: ${panelIndex}`);
+  }
+}
+
+*/
+
+    /////
 
 
 function render() {
@@ -205,6 +409,7 @@ function render() {
   frameCount++;
   requestAnimationFrame(render);
 }
+
 
     let frameCount = 0;
     render();
