@@ -173,38 +173,66 @@
 }
 
 
-
-
-
-
-
-
-
   //define ground level:
   const groundLevel = backgroundCanvas.height - grassHeight / 1.5 ;
 // Initialize obstacles 
 const obstacles = [
-  { x: 1200, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 1600, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 2200, y: groundLevel + 10, width: 40, height: 30, speed: 2 }, // Now correctly positioned
-  { x: 3000, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 3500, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 4000, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 5000, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 6000, y: groundLevel + 10, width: 40, height: 30, speed: 2 },
-  { x: 7600, y: groundLevel + 10, width: 40, height: 30, speed: 2 }
+  { x: 1200, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 1600, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 2200, y: groundLevel + 10, width: 25, height: 30, speed: 2 }, // Now correctly positioned
+  { x: 3000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 3500, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 4000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 5000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 6000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
+  { x: 7600, y: groundLevel + 10, width: 25, height: 30, speed: 2 }
 ];
 
 // Update positions of obstacles
 function updateObstacles() {
   obstacles.forEach(obstacle => {
     obstacle.x -= obstacle.speed; // Move obstacle left by speed
-
-    
   });
 }
 
 
+// Draw obstacles with face
+function drawObstacles() {
+  obstacles.forEach(obstacle => {
+    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
+
+    // Only draw obstacles within the visible area
+    if (obstacleX + obstacle.width > 0 && obstacleX < backgroundCanvas.width) {
+      // Draw the obstacle body (now black)
+      bgCtx.fillStyle = "#000000"; // Black color for obstacles
+      bgCtx.fillRect(obstacleX, obstacle.y, obstacle.width, obstacle.height);
+      
+      // Draw the face (eyes and mouth) on the obstacle
+      drawFace(obstacleX, obstacle.y, obstacle.width, obstacle.height);
+    }
+  });
+}
+
+// Draw a sad or angry face on the obstacle
+function drawFace(x, y, width, height) {
+  const faceX = x + 5;  // Adjust face position
+  const faceY = y + 5;  // Adjust face position
+  const faceSize = 15;   // Face size relative to obstacle
+
+  // Draw eyes (simple pixels)
+  bgCtx.fillStyle = "#FFFF00";  // White color for eyes
+  bgCtx.fillRect(faceX + 3, faceY + 3, 3, 3); // Left eye
+  bgCtx.fillRect(faceX + 9, faceY + 3, 3, 3); // Right eye
+
+  // Draw a sad or angry mouth (you can choose between sad or angry by changing the arc)
+  bgCtx.beginPath();
+  bgCtx.arc(faceX + 7, faceY + 17, 5, Math.PI, 0, false); // Sad frown (flipped arc)
+  bgCtx.strokeStyle = "#FFFF00"; // White for mouth
+  bgCtx.lineWidth = 2;
+  bgCtx.stroke();
+}
+
+/*
 // Draw obstacles
 function drawObstacles() {
   obstacles.forEach(obstacle => {
@@ -217,7 +245,7 @@ function drawObstacles() {
     }
   });
 }
-
+*/
 const scaleFactor = 1.25;
 let lastCollisionTime = 0; // To store the last time a collision was logged
 const collisionCooldown = 2000; // 2 seconds (in milliseconds)
