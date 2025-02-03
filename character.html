@@ -153,7 +153,7 @@
 
    ////////////
     //LIFE BAR SYSTEM:
-    let lives = 3; // Initialize the number of lives
+    let lives = 5; // Initialize the number of lives
     const heartSize = 30; // Size of each heart
     const heartMargin = 10; // Margin between hearts
 
@@ -175,14 +175,23 @@
     }
 
 
-function drawLives() {
-    const heartXStart = backgroundCanvas.width - (heartSize + heartMargin) * 3; // Place hearts on the top-right corner
+    function drawLives() {
+    const heartXStart = backgroundCanvas.width - (heartSize + heartMargin) * 5; // Place hearts on the top-right corner
+    const textX = heartXStart - 80; // Position for the "Lives:" text
+
+    // Draw "Lives:" text
+    charCtx.fillStyle = "#000000"; // Black color for the text
+    charCtx.font = "20px Arial";
+    charCtx.fillText("Lives:", textX, 25); // Adjust the vertical position as needed
 
     for (let i = 0; i < lives; i++) {
-        charCtx.fillStyle = "red"; // Fill color for the hearts
-        drawHeart(heartXStart + (heartSize + heartMargin) * i + heartSize / 2, 20, heartSize);
+        // Draw each heart in red
+        charCtx.fillStyle = "red";
+        drawHeart(heartXStart + (heartSize + heartMargin) * i, 20, heartSize);
     }
 }
+
+
 
 
 
