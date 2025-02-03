@@ -157,35 +157,48 @@
     const heartSize = 30; // Size of each heart
     const heartMargin = 10; // Margin between hearts
 
-    function drawLives() {
+    function drawHeart(x, y, size) {
+    charCtx.beginPath();
+    //charCtx.moveTo(x, y + size / 4); // Move to the starting point
+
+    // Left curve of the heart
+    charCtx.arc(x - size / 4, y - size / 4, size / 4, Math.PI, 0, false);
+
+    // Right curve of the heart
+    charCtx.arc(x + size / 4, y - size / 4, size / 4, Math.PI, 0, false);
+
+    // Bottom point of the heart
+    charCtx.lineTo(x, y + 10); // Bottom point
+
+    charCtx.closePath();
+    charCtx.fill();
+    }
+
+
+function drawLives() {
     const heartXStart = backgroundCanvas.width - (heartSize + heartMargin) * 3; // Place hearts on the top-right corner
 
     for (let i = 0; i < lives; i++) {
-        // Draw each heart in red
-        charCtx.fillStyle = "red";
-        charCtx.beginPath();
-        charCtx.moveTo(heartXStart + (heartSize + heartMargin) * i, 20);
-        charCtx.arc(heartXStart + (heartSize + heartMargin) * i + heartSize / 2, 20 + heartSize / 2, heartSize / 2, Math.PI, 0, false);
-        charCtx.arc(heartXStart + (heartSize + heartMargin) * i + heartSize / 2, 20 - heartSize / 2, heartSize / 2, 0, Math.PI, false);
-        charCtx.closePath();
-        charCtx.fill();
+        charCtx.fillStyle = "red"; // Fill color for the hearts
+        drawHeart(heartXStart + (heartSize + heartMargin) * i + heartSize / 2, 20, heartSize);
     }
 }
+
 
 
   //define ground level:
   const groundLevel = backgroundCanvas.height - grassHeight / 1.5 ;
 // Initialize obstacles 
 const obstacles = [
-  { x: 1200, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 1600, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 2200, y: groundLevel + 10, width: 25, height: 30, speed: 2 }, // Now correctly positioned
-  { x: 3000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 3500, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 4000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 5000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 6000, y: groundLevel + 10, width: 25, height: 30, speed: 2 },
-  { x: 7600, y: groundLevel + 10, width: 25, height: 30, speed: 2 }
+  { x: 1200, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 1600, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 2200, y: groundLevel + 17, width: 25, height: 25, speed: 2 }, // Now correctly positioned
+  { x: 3000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 3500, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 4000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 5000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 6000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
+  { x: 7600, y: groundLevel + 17, width: 25, height: 25, speed: 2 }
 ];
 
 // Update positions of obstacles
@@ -226,26 +239,12 @@ function drawFace(x, y, width, height) {
 
   // Draw a sad or angry mouth (you can choose between sad or angry by changing the arc)
   bgCtx.beginPath();
-  bgCtx.arc(faceX + 7, faceY + 17, 5, Math.PI, 0, false); // Sad frown (flipped arc)
+  bgCtx.arc(faceX + 7, faceY + 15, 5, Math.PI, 0, false); // The mouth
   bgCtx.strokeStyle = "#FFFF00"; // White for mouth
   bgCtx.lineWidth = 2;
   bgCtx.stroke();
 }
 
-/*
-// Draw obstacles
-function drawObstacles() {
-  obstacles.forEach(obstacle => {
-    const obstacleX = obstacle.x - backgroundOffset; // Adjust obstacle position by backgroundOffset
-
-    // Only draw obstacles within the visible area
-    if (obstacleX + obstacle.width > 0 && obstacleX < backgroundCanvas.width) {
-      bgCtx.fillStyle = "#FF4500"; // Orange color for obstacles
-      bgCtx.fillRect(obstacleX, obstacle.y, obstacle.width, obstacle.height);
-    }
-  });
-}
-*/
 const scaleFactor = 1.25;
 let lastCollisionTime = 0; // To store the last time a collision was logged
 const collisionCooldown = 2000; // 2 seconds (in milliseconds)
