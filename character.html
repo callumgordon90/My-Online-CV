@@ -44,12 +44,12 @@
 
     // Milestone properties
     const milestones = [
-      { year: "2020", x: 800 },
-      { year: "2021", x: 1800 },
-      { year: "2022", x: 2800 },
-      { year: "2023", x: 3800 },
-      { year: "2024", x: 4800 },
-      { year: "2025", x: 5800 },
+      { year: "2020", x: 600 },
+      { year: "2021", x: 1400 },
+      { year: "2022", x: 2200 },
+      { year: "2023", x: 3000 },
+      { year: "2024", x: 3800 },
+      { year: "2025", x: 4600 },
     ];
     const milestoneColor = "#808080"; // Grey for menhirs
     const milestoneWidth = 80;
@@ -381,12 +381,7 @@ const tokens = [
   { x: 3800, y: backgroundCanvas.height - grassHeight - 40, t: 7 },
   { x: 4200, y: backgroundCanvas.height - grassHeight - 150, t: 8 },
   { x: 4600, y: backgroundCanvas.height - grassHeight - 70, t: 9 },
-  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, t: 10 },
-  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, t: 11 },
-  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, t: 12 },
-  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, t: 13 },
-  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, t: 14 },
-  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, t: 15 },
+  
 ];
 const tokenRadius = 25; // Increased size of the token
 const tokenColor = "#FF0000"; // Red color for the question mark
@@ -441,12 +436,6 @@ function drawTokens() {
   { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false, p:7 },
   { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false, p:8 },
   { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false, p:9 },
-  { x: 5000, y: backgroundCanvas.height - grassHeight - 140, text: 'Eleven', visible: false, p:10 },
-  { x: 5400, y: backgroundCanvas.height - grassHeight - 15, text: 'Twelve', visible: false, p:11 },
-  { x: 5800, y: backgroundCanvas.height - grassHeight - 150, text: 'Thirteen', visible: false, p:12 },
-  { x: 6200, y: backgroundCanvas.height - grassHeight - 70, text: 'Fourteen', visible: false, p:13 },
-  { x: 6600, y: backgroundCanvas.height - grassHeight - 140, text: 'Fifteen', visible: false, p:14 },
-  { x: 7000, y: backgroundCanvas.height - grassHeight - 15, text: 'Sixteen', visible: false, p:15 },
 ];
 
 
@@ -488,7 +477,7 @@ function showPanel(panelIndex) {
 // Trophy properties
 // Updated Trophy Properties (Position, width, height unchanged)
 const trophy = {
-  x: 750,
+  x: 5200,
   y: backgroundCanvas.height - grassHeight - 100,
   width: 50,
   height: 70
