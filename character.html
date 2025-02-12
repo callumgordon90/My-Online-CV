@@ -291,7 +291,7 @@ function checkObstacleCollision() {
 
             if (lives <= 0) {
                 // Game Over if no lives are left
-                alert("Game Over!");
+                //alert("Game Over!");
                 resetGame();
             }
         }
@@ -303,7 +303,7 @@ function checkObstacleCollision() {
 //RESET THE GAME AFTER LOSING:
 function resetGame() {
   // Redirect to the index.html page (the main menu or starting point)
-  window.location.href = "index.html";
+  window.location.href = "gameover.html";
 }
 
 
@@ -484,6 +484,64 @@ function showPanel(panelIndex) {
   }
 }
 
+//ENDGAME: TROPHY:
+// Trophy properties
+// Updated Trophy Properties (Position, width, height unchanged)
+const trophy = {
+  x: 750,
+  y: backgroundCanvas.height - grassHeight - 100,
+  width: 50,
+  height: 70
+};
+
+// Draw trophy (Updated design)
+function drawTrophy() {
+  const trophyX = trophy.x - backgroundOffset;
+
+  if (trophyX > -trophy.width && trophyX < backgroundCanvas.width + trophy.width) {
+    bgCtx.fillStyle = "#FFD700"; // Gold color for the trophy
+    //bgCtx.strokeStyle = "black";
+    bgCtx.lineWidth = 2;
+
+    // Cup (Updated, tapered and wider design)
+    bgCtx.beginPath();
+    bgCtx.moveTo(trophyX - 40, trophy.y);  // Left top
+    bgCtx.lineTo(trophyX + 40, trophy.y);  // Right top
+    bgCtx.lineTo(trophyX + 30, trophy.y + 30); // Bottom right taper
+    bgCtx.lineTo(trophyX - 30, trophy.y + 30); // Bottom left taper
+    bgCtx.closePath();
+    bgCtx.fill();
+    bgCtx.stroke();
+
+    // Handles (Updated, rounder and smoother)
+    bgCtx.beginPath();
+    bgCtx.arc(trophyX - 50, trophy.y + 10, 18, Math.PI * 0.9, Math.PI * 1.4);
+    bgCtx.arc(trophyX + 50, trophy.y + 10, 18, Math.PI * 1.6, Math.PI * 2.1);
+    bgCtx.fill();
+    bgCtx.stroke();
+
+    // Stem (Unchanged)
+    bgCtx.fillRect(trophyX - 7, trophy.y + 20, 12, 50);
+    bgCtx.strokeRect(trophyX - 7, trophy.y + 20, 12, 50);
+
+    // Base (Unchanged)
+    bgCtx.fillRect(trophyX - 30, trophy.y + 65, 60, 15);
+    bgCtx.strokeRect(trophyX - 30, trophy.y + 65, 60, 15);
+    bgCtx.fillRect(trophyX - 40, trophy.y + 80, 80, 10);
+    bgCtx.strokeRect(trophyX - 40, trophy.y + 80, 80, 10);
+
+    // Draw the "You Win!" text above the trophy
+    bgCtx.fillStyle = "black";
+    bgCtx.font = "bold 24px Arial";
+    bgCtx.textAlign = "center";
+    bgCtx.fillText("You Win!", trophyX, trophy.y - 20);
+  }
+}
+
+
+
+
+
 ///
 function render() {
   bgCtx.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height );
@@ -495,6 +553,7 @@ function render() {
   drawObstacles();
   checkTokenCollection();
   drawPanels();
+  drawTrophy();
   checkObstacleCollision();
   drawLives();  // Draw the remaining lives
 

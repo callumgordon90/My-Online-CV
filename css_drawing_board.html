@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Trophy</title>
+    <style>
+        body { text-align: center; }
+        canvas { background: #ddd; }
+    </style>
+</head>
+<body>
+    <canvas id="trophyCanvas" width="200" height="200"></canvas>
+    <script>
+        const canvas = document.getElementById("trophyCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function drawTrophy() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#FFD700"; // Gold color
+    
+    const x = 100, y = 60; // Trophy position
+
+    // Cup (wider and slightly tapered for a stronger look)
+    ctx.beginPath();
+    ctx.moveTo(x - 40, y);  // Left top
+    ctx.lineTo(x + 40, y);  // Right top
+    ctx.lineTo(x + 30, y + 30); // Bottom right taper
+    ctx.lineTo(x - 30, y + 30); // Bottom left taper
+    ctx.closePath();
+    ctx.fill();
+
+    // Handles (smoother and rounder)
+    ctx.beginPath();
+    ctx.arc(x - 50, y + 10, 18, Math.PI * 0.9, Math.PI * 1.4);
+    ctx.arc(x + 50, y + 10, 18, Math.PI * 1.6, Math.PI * 2.1);
+    ctx.fill();
+
+    // Stem
+    ctx.fillRect(x - 7, y + 20, 12, 50);
+
+    // Base
+    ctx.fillRect(x - 30, y + 65, 60, 15);
+    ctx.fillRect(x - 40, y + 80, 80, 10);
+}
+
+drawTrophy();
+
+    </script>
+</body>
+</html>
