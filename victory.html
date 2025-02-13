@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16-Bit CV Game</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #87CEEB; /* Light blue background */
+      font-family: "Arial", sans-serif;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #FFFFFF;
+      text-shadow: 2px 2px #000000;
+    }
+    .download-button {
+      display: block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #FFD700; /* Gold color for links */
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: #e03333; /* Bright red button */
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .download-button:hover {
+      transform: scale(1.1);
+      background-color: #6e0808; /* Darker red on hover */
+    }
+
+    .play-again-button {
+      display: block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #FFD700; /* Gold color for links */
+      font-size: 1.5rem;
+      font-weight: bold;
+      background-color: #32CD32; /* Bright green button */
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .play-again-button:hover {
+      transform: scale(1.1);
+      background-color: #228B22; /* Darker green on hover */
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>YOU WIN</h1>
+    <h1>Download Callum's CV</h1>
+    <!-- Red download button with class 'download-button' -->
+    <a href="Callum_Gordon_Curriculum_Vitae.pdf" download="Callum_CV.pdf" class="download-button">Download Callum's CV</a>
+    <!-- Green play again button with class 'play-again-button' -->
+    <a href="index.html" class="play-again-button">Play again</a>
+  </div>
+</body>
+</html>
