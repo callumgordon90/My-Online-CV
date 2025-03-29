@@ -460,7 +460,7 @@ function drawPanels() {
       const words = panel.text.split(" ");
       let line = "";
       const lineHeight = 22; // Space between lines
-      let y = panel.y - panelHeight / 2 + 40; // Starting Y position of text
+      let y = panel.y - panelHeight + 40 ; // Starting Y position of text
 
       for (let i = 0; i < words.length; i++) {
         let testLine = line + words[i] + " ";
