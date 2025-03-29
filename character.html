@@ -199,15 +199,15 @@
   const groundLevel = backgroundCanvas.height - grassHeight / 1.5 ;
 // Initialize obstacles 
 const obstacles = [
-  { x: 1200, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 1600, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 2200, y: groundLevel + 17, width: 25, height: 25, speed: 2 }, // Now correctly positioned
-  { x: 3000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 3500, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 4000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 5000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 6000, y: groundLevel + 17, width: 25, height: 25, speed: 2 },
-  { x: 7600, y: groundLevel + 17, width: 25, height: 25, speed: 2 }
+  { x: 1200, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 1600, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 2200, y: groundLevel + 17, width: 25, height: 30, speed: 2 }, // Now correctly positioned
+  { x: 3000, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 3500, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 4000, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 5000, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 6000, y: groundLevel + 17, width: 25, height: 30, speed: 2 },
+  { x: 7600, y: groundLevel + 17, width: 25, height: 30, speed: 2 }
 ];
 
 // Update positions of obstacles
@@ -426,16 +426,16 @@ function drawTokens() {
 
 
     const panels = [
-  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: 'One', visible: false, p:0 },
-  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: 'Two', visible: false, p:1 },
-  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: 'Three', visible: false, p:2 },
-  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: 'Four', visible: false, p:3 },
-  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: 'Five', visible: false, p:4 },
-  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: 'Six', visible: false, p:5 },
-  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: 'Seven', visible: false, p:6 },
-  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: 'Eight', visible: false, p:7 },
-  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: 'Nine', visible: false, p:8 },
-  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: 'Ten', visible: false, p:9 },
+  { x: 1000, y: backgroundCanvas.height - grassHeight - 150, text: "I’m Callum Gordon, a Junior Backend Developer passionate about building APIs, databases, and scalable backend systems.", visible: false, p: 0 },
+  { x: 1400, y: backgroundCanvas.height - grassHeight - 70, text: "I work with Node.js, PHP, C#, MySQL, MongoDB, Docker, and more. Strong focus on backend development.", visible: false, p: 1 },
+  { x: 1800, y: backgroundCanvas.height - grassHeight - 140, text: "I started as a Full Stack Developer but now specialize in backend, working on APIs, databases, and server-side logic.", visible: false, p: 2 },
+  { x: 2200, y: backgroundCanvas.height - grassHeight - 15, text: "At Aiudo, I worked on the company's API, ERP, and database, debugging and maintaining backend functionality with PHP and Node.js.", visible: false, p: 3 },
+  { x: 2600, y: backgroundCanvas.height - grassHeight - 150, text: "At Grupo Segura, I managed company databases and APIs, fixing anomalies and integrating third-party APIs with C# and .NET.", visible: false, p: 4 },
+  { x: 3000, y: backgroundCanvas.height - grassHeight - 70, text: "At Controliza, I contributed to the ERP redesign, creating database-driven web views and fixing backend logic with PHP and SQL.", visible: false, p: 5 },
+  { x: 3400, y: backgroundCanvas.height - grassHeight - 140, text: "I built a full-stack banking app with Node.js, React, and PostgreSQL. Users can manage accounts, make transactions, and generate statements.", visible: false, p: 6 },
+  { x: 3800, y: backgroundCanvas.height - grassHeight - 15, text: "A social network built with the MERN stack. Users post, comment, like, and follow others in a joke-sharing platform.", visible: false, p: 7 },
+  { x: 4200, y: backgroundCanvas.height - grassHeight - 150, text: "A REST API for a gaming forum built in PHP with Laravel. Features CRUD functionality and user authentication.", visible: false, p: 8 },
+  { x: 4600, y: backgroundCanvas.height - grassHeight - 70, text: "I'm passionate about backend development, always learning new technologies, and looking for my next challenge!", visible: false, p: 9 },
 ];
 
 
@@ -443,7 +443,6 @@ const panelWidth = 300;
 const panelHeight = 300;
 const panelColor = "#FFFF00"; // Yellow color for the panel
 
-//drawPanels
 function drawPanels() {
   panels.forEach((panel, index) => {
     const panelX = panel.x - backgroundOffset;
@@ -452,15 +451,34 @@ function drawPanels() {
       bgCtx.fillStyle = panelColor;
       bgCtx.fillRect(panelX, panel.y - panelHeight, panelWidth, panelHeight); // Panel background
 
-      // Draw the text inside the panel
+      // Text properties
       bgCtx.fillStyle = "#000000"; // Black color for text
-      bgCtx.font = "bold 20px Arial"; // Adjust the font size for the text
+      bgCtx.font = "bold 16px Arial"; // Adjusted font size for better text wrapping
       bgCtx.textAlign = "center";
-      bgCtx.textBaseline = "middle";
-      bgCtx.fillText(panel.text, panelX + panelWidth / 2, panel.y - panelHeight / 2); // Position the text inside the panel
+
+      // Split text into multiple lines
+      const words = panel.text.split(" ");
+      let line = "";
+      const lineHeight = 22; // Space between lines
+      let y = panel.y - panelHeight / 2 + 40; // Starting Y position of text
+
+      for (let i = 0; i < words.length; i++) {
+        let testLine = line + words[i] + " ";
+        let testWidth = bgCtx.measureText(testLine).width;
+
+        if (testWidth > panelWidth - 20) { // If text exceeds panel width, wrap to the next line
+          bgCtx.fillText(line, panelX + panelWidth / 2, y);
+          line = words[i] + " ";
+          y += lineHeight; // Move to the next line
+        } else {
+          line = testLine;
+        }
+      }
+      bgCtx.fillText(line, panelX + panelWidth / 2, y); // Print the remaining text
     }
   });
 }
+
 
 
 
