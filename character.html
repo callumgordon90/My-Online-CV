@@ -23,7 +23,8 @@
   <canvas id="characterCanvas"></canvas>
 
   <script type="module">
-    import { drawClouds, drawCloud } from './background.js';
+    import { drawClouds, drawCloud } from './clouds.js';
+    import { drawTree, drawTrees } from './trees.js'
 
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
@@ -366,6 +367,7 @@ function updatePositions() {
       });
 
       drawClouds(bgCtx);
+      drawTrees(bgCtx);
     }
 
 ///
