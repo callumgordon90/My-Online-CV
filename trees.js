@@ -50,7 +50,8 @@ function drawTree(ctx, x, y) {
 function drawTrees(ctx) {
   treePositions.forEach((tree) => {
     drawTree(ctx, tree.x, tree.y);
-    //tree.x -= treeSpeed; // Move the tree to the left
+    //let backgroundOffset = 0;
+    tree.x -= backgroundOffset; // Move the tree to the left
 
     // Reset tree position when it moves off-screen
     //if (tree.x < -100) {

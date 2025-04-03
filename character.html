@@ -24,7 +24,7 @@
 
   <script type="module">
     import { drawClouds, drawCloud } from './clouds.js';
-    import { drawTree, drawTrees } from './trees.js'
+    //import { drawTree, drawTrees } from './trees.js'
 
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
@@ -60,7 +60,53 @@
     let backgroundOffset = 0;
     const backgroundSpeed = 2;
 
-    
+                 // Game constants for tree size and design
+                const TREE_WIDTH = 50;
+                const TREE_HEIGHT = 70;
+
+                // Array to store tree objects with x, y positions
+                let trees = [
+                  { x: 500, y: 360 },
+                  { x: 1500, y: 360 },
+                  { x: 2500, y: 360 },
+                  { x: 3500, y: 360 },
+                  { x: 4500, y: 360 },
+                  // Add more trees as needed
+                ];
+
+                // Aesthetic tree drawing function
+                function drawTree(ctx, x, y) {
+                  const foliageColor = "green";
+                  const trunkColor = "brown";
+                  
+                  const foliageShape = [
+                    [1, 1],            // Top row (single block)
+                    [1, 1, 1, 1, 1],  // Second row
+                    [1, 1, 1, 1, 1, 1, 1], // Third row
+                    [1, 1, 1, 1, 1],  // Fourth row
+                  ];
+
+                  // Draw the foliage
+                  for (let i = 0; i < foliageShape.length; i++) {
+                    const row = foliageShape[i];
+                    const startX = x - Math.floor(row.length / 2) * 20; // Center the row horizontally
+                    const startY = y + (i * 20); // Increase Y coordinate for each row
+
+                    // Draw the blocks in this row
+                    for (let j = 0; j < row.length; j++) {
+                      ctx.fillStyle = foliageColor;
+                      ctx.fillRect(startX + j * 20, startY, 20, 20);
+                    }
+                  }
+
+                  // Draw the trunk below the foliage
+                  ctx.fillStyle = trunkColor;
+                  const trunkWidth = 20;
+                  const trunkHeight = 40;
+                  const trunkX = x; // Center trunk under foliage
+                  const trunkY = y + foliageShape.length * 20;
+                  ctx.fillRect(trunkX, trunkY, trunkWidth, trunkHeight);
+                }
 
 
     // Character properties
@@ -344,31 +390,40 @@ function updatePositions() {
 }
    
     // Draw the background
-    function drawBackground() {
-      bgCtx.fillStyle = skyColor;
-      bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+function drawBackground() {
+  bgCtx.fillStyle = skyColor;
+  bgCtx.fillRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
 
-      bgCtx.fillStyle = grassColor;
-      bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
+  bgCtx.fillStyle = grassColor;
+  bgCtx.fillRect(0, backgroundCanvas.height - grassHeight, backgroundCanvas.width, grassHeight);
 
-      // Draw milestones
-      milestones.forEach((milestone) => {
-        const milestoneX = milestone.x - backgroundOffset;
-        if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
-          bgCtx.fillStyle = milestoneColor;
-          bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
+  // Draw milestones
+  milestones.forEach((milestone) => {
+    const milestoneX = milestone.x - backgroundOffset;
+    if (milestoneX + milestoneWidth > 0 && milestoneX < backgroundCanvas.width) {
+      bgCtx.fillStyle = milestoneColor;
+      bgCtx.fillRect(milestoneX, backgroundCanvas.height - grassHeight - milestoneHeight, milestoneWidth, milestoneHeight);
 
-          bgCtx.fillStyle = "#404040"; // Dark grey text
-          bgCtx.font = milestoneFont;
-          bgCtx.textAlign = "center";
-          bgCtx.fillText("", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
-          bgCtx.fillText(milestone.year, milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 45);
-        }
-      });
-
-      drawClouds(bgCtx);
-      drawTrees(bgCtx);
+      bgCtx.fillStyle = "#404040"; // Dark grey text
+      bgCtx.font = milestoneFont;
+      bgCtx.textAlign = "center";
+      bgCtx.fillText("", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
+      bgCtx.fillText(milestone.year, milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 45);
     }
+  });
+
+  // Draw trees with aesthetic design and placement logic
+  trees.forEach((tree) => {
+    const treeX = tree.x - backgroundOffset; // Adjust tree position based on background offset
+    if (treeX + TREE_WIDTH > 0 && treeX < backgroundCanvas.width) {
+      // Draw the tree using the aesthetic design function
+      drawTree(bgCtx, treeX, tree.y);
+    }
+  });
+
+  // Draw clouds (if applicable)
+  drawClouds(bgCtx);
+}
 
 ///
 // Token properties
