@@ -4,11 +4,13 @@ const trunkColor = "#8B4513"; // Brown trunk
 
 // Tree positions for animation
 let treePositions = [
-  { x: 200, y: 250 },
-  { x: 500, y: 270 },
-  { x: 800, y: 230 },
-  { x: 1100, y: 260 },
+  { x: 200, y: 360 },
+  { x: 1400, y: 360 },
+  { x: 3000, y: 360 },
+  { x: 1100, y: 360 },
 ];
+
+
 
 const treeSpeed = 1; // Speed of tree movement
 
