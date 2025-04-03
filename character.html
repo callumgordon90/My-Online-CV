@@ -26,6 +26,13 @@
     import { drawClouds, drawCloud } from './clouds.js';
     //import { drawTree, drawTrees } from './trees.js'
 
+    //IMPORT SOUNDS:
+    const jumpSound = new Audio('jump_01.wav');  // Load the jump sound file
+    const enemySound = new Audio('enemy1.wav');  
+    const tokenSound = new Audio('token1.wav');  
+    const buttonSound = new Audio( 'button1.wav' );
+
+
     // Canvas setup
     const backgroundCanvas = document.getElementById("background");
     const bgCtx = backgroundCanvas.getContext("2d");
@@ -133,6 +140,7 @@
       if (e.key === "ArrowRight") keysPressed.right = true;
       if (e.key === "ArrowUp" && !isJumping) {
         isJumping = true;
+        jumpSound.play();  // Play the jump sound when the jump starts
         jumpVelocity = -10; // Initial jump force
       }
     });
@@ -331,6 +339,7 @@ function checkObstacleCollision() {
 
         if ((isLeftShoeColliding || isRightShoeColliding) && (currentTime - lastCollisionTime >= collisionCooldown)) {
             console.log("Shoe collision detected!");
+            enemySound.play();
 
             // Decrease lives and update lastCollisionTime
             lives--;
@@ -473,6 +482,7 @@ function drawTokens() {
           tokens.splice(index, 1);
           console.log(`Collected token at ${token.x}, ${token.y}, ${token.t}`);
           console.log(`Token index in array: ${token.t}`);
+          tokenSound.play();
 
           // Show the corresponding panel text ('one', 'two', etc.)
           showPanel(token.t); // Adjust based on the token index
@@ -498,7 +508,7 @@ function drawTokens() {
 
 
 const panelWidth = 300;
-const panelHeight = 200;
+const panelHeight = 230;
 const panelColor = "#FFFF00"; // Yellow color for the panel
 
 function drawPanels() {
