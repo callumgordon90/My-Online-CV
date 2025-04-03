@@ -44,17 +44,17 @@
 
     // Milestone properties
     const milestones = [
-      { year: "2020", x: 600 },
-      { year: "2021", x: 1400 },
-      { year: "2022", x: 2200 },
-      { year: "2023", x: 3000 },
-      { year: "2024", x: 3800 },
-      { year: "2025", x: 4600 },
+      { year: "let's go!", x: 600 },
+      { year: "keep going!", x: 1400 },
+      { year: "push yourself!", x: 2200 },
+      { year: "keep learning!", x: 3000 },
+      { year: "gain experience!", x: 3800 },
+      { year: "the goal awaits!", x: 4600 },
     ];
     const milestoneColor = "#808080"; // Grey for menhirs
-    const milestoneWidth = 80;
+    const milestoneWidth = 140;
     const milestoneHeight = 100;
-    const milestoneFont = "bold 20px Arial";
+    const milestoneFont = "bold 18px Arial";
 
     let backgroundOffset = 0;
     const backgroundSpeed = 2;
@@ -360,7 +360,7 @@ function updatePositions() {
           bgCtx.fillStyle = "#404040"; // Dark grey text
           bgCtx.font = milestoneFont;
           bgCtx.textAlign = "center";
-          bgCtx.fillText("año", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
+          bgCtx.fillText("", milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 25);
           bgCtx.fillText(milestone.year, milestoneX + milestoneWidth / 2, backgroundCanvas.height - grassHeight - milestoneHeight + 45);
         }
       });
